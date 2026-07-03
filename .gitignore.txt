@@ -1,0 +1,15 @@
+# sigap/.gitignore
+sigap-laravel/.env
+sigap-laravel/vendor/
+sigap-laravel/node_modules/
+sigap-laravel/storage/app/public/*
+!sigap-laravel/storage/app/public/.gitkeep
+sigap-laravel/storage/logs/*
+!sigap-laravel/storage/logs/.gitkeep
+sigap-laravel/bootstrap/cache/*
+!sigap-laravel/bootstrap/cache/.gitkeep
+sigap-flutter/.dart_tool/
+sigap-flutter/build/
+sigap-flutter/android/.gradle/
+sigap-flutter/android/local.properties
+sigap-flutter/ios/Pods/
