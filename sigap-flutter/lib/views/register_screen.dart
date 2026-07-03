@@ -1,3 +1,4 @@
+```dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/auth_controller.dart';
@@ -17,6 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordCtrl = TextEditingController();
   bool _isLoading = false;
 
+  // Menangani proses registrasi pengguna baru
   Future<void> _handleRegister() async {
     setState(() => _isLoading = true);
     try {
@@ -86,3 +88,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
+```
