@@ -10,12 +10,11 @@ Route::middleware('auth')->group(function () {
          ->name('dashboard');
 });
 
-// Grup admin — akan diisi di CP2 & CP3
 Route::middleware(['auth', 'role:admin'])
      ->prefix('admin')
      ->name('admin.')
      ->group(function () {
-         // CP2: reports, CP3: categories, users
+        
      });
 
 require __DIR__.'/auth.php';
