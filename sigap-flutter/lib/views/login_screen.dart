@@ -22,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // Menangani proses login pengguna
   Future<void> _handleLogin() async {
     final auth    = context.read<AuthController>();
     final success = await auth.login(
