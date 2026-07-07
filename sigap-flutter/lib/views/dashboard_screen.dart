@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/auth_controller.dart';
 import 'login_screen.dart';
+import 'report_list_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -71,6 +72,18 @@ class DashboardScreen extends StatelessWidget {
                         style: TextStyle(color: Colors.grey)),
                   ]),
                 ),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const ReportListScreen())),
+                icon: const Icon(Icons.list_alt),
+                label: const Text('Lihat Laporan Saya'),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                    foregroundColor: Colors.white),
               ),
             ],
           ),
