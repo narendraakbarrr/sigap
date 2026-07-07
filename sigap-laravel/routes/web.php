@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,6 +20,8 @@ Route::middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         // Laporan
+        Route::resource('categories', CategoryController::class)
+         ->except(['show']);
         Route::get('/reports',                    [ReportController::class, 'index'])
             ->name('reports.index');
         Route::get('/reports/{report}',           [ReportController::class, 'show'])
