@@ -9,6 +9,9 @@ use App\Models\ReportStatusLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\UpdateReportStatusRequest;
+use App\Http\Requests\UpdateReportRequest;
 
 class ReportController extends Controller
 {
@@ -27,7 +30,7 @@ class ReportController extends Controller
     }
 
     // POST /api/v1/reports
-    public function store(Request $request)
+    public function store(StoreReportRequest $request)
     {
         $request->validate([
             'title'            => 'required|string|max:255',
@@ -107,7 +110,7 @@ class ReportController extends Controller
     }
 
     // PUT /api/v1/reports/{id}/status  (admin only)
-    public function updateStatus(Request $request, Report $report)
+    public function updateStatus(UpdateReportStatusRequest $request, Report $report)
     {
         $request->validate([
             'status' => 'required|in:diterima,diproses,selesai,ditolak',

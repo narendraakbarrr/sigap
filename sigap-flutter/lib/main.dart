@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'controllers/auth_controller.dart';
 import 'views/login_screen.dart';
 import 'views/dashboard_screen.dart';
+import 'controllers/report_controller.dart';
 
 void main() {
   runApp(
