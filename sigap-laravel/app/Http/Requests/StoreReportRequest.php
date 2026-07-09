@@ -18,6 +18,7 @@ class StoreReportRequest extends FormRequest
             'latitude'         => 'nullable|numeric|between:-90,90',
             'longitude'        => 'nullable|numeric|between:-180,180',
             'photo'            => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'urgency'          => 'nullable|in:normal,penting,darurat',
         ];
     }
 

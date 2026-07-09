@@ -54,19 +54,23 @@ class ReportController extends Controller
     public function updateStatus(Request $request, Report $report)
     {
         $request->validate([
-            'status' => 'required|in:diterima,diproses,selesai,ditolak',
-            'notes'  => 'nullable|string|max:500',
+            'status'           => 'required|in:diterima,ditinjau,in_progress,selesai,ditolak',
+            'urgency'          => 'nullable|in:normal,penting,darurat',
+            'notes'            => 'nullable|string|max:500',
+            'task_description' => 'nullable|string|max:1000',
         ]);
 
-        $oldStatus = $report->status;
-        $report->update(['status' => $request->status]);
+        $report->update([
+            'status'  => $request->status,
+            'urgency' => $request->urgency ?? $report->urgency,
+        ]);
 
-        // Catat di status log
         ReportStatusLog::create([
-            'report_id'  => $report->id,
-            'changed_by' => Auth::id(),
-            'status'     => $request->status,
-            'notes'      => $request->notes,
+            'report_id'        => $report->id,
+            'changed_by'       => Auth::id(),
+            'status'           => $request->status,
+            'notes'            => $request->notes,
+            'task_description' => $request->task_description,
         ]);
 
         return redirect()

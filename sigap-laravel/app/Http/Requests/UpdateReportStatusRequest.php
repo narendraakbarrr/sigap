@@ -6,13 +6,17 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateReportStatusRequest extends FormRequest
 {
-    public function authorize(): bool { return true; }
+    public function authorize(): bool
+    {
+        return true;
+    }
 
     public function rules(): array
     {
         return [
-            'status' => 'required|in:diterima,diproses,selesai,ditolak',
-            'notes'  => 'nullable|string|max:500',
+            'status'           => 'required|in:diterima,ditinjau,in_progress,selesai,ditolak',
+            'notes'            => 'nullable|string|max:500',
+            'task_description' => 'nullable|string|max:1000',
         ];
     }
 
