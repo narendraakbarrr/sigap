@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\ReportController;
 use App\Http\Controllers\Web\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -45,6 +46,18 @@ Route::middleware('auth')->group(function () {
 
             Route::delete('/reports/{report}', [ReportController::class, 'destroy'])
                 ->name('reports.destroy');
+
+            Route::get('/users',                   [UserController::class, 'index'])
+                ->name('users.index');
+
+            Route::get('/users/{user}',            [UserController::class, 'show'])
+                ->name('users.show');
+
+            Route::put('/users/{user}/role',       [UserController::class, 'updateRole'])
+                ->name('users.updateRole');
+                
+            Route::delete('/users/{user}',         [UserController::class, 'destroy'])
+                ->name('users.destroy');
         });
 
     Route::middleware(['role:user'])
