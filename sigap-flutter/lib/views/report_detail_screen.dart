@@ -176,6 +176,141 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     report.description,
                     style: const TextStyle(color: Colors.black87),
                   ),
+
+                  // Track Record
+                  if (report.statusLogs.isNotEmpty) ...[
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Track Record',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    ...report.statusLogs.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final log = entry.value;
+                      final isLast = index == report.statusLogs.length - 1;
+
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Timeline indicator
+                          Column(
+                            children: [
+                              Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: Colors.deepOrange,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${index + 1}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (!isLast)
+                                Container(
+                                  width: 2,
+                                  height: 40,
+                                  color: Colors.grey.shade300,
+                                ),
+                            ],
+                          ),
+                          const SizedBox(width: 12),
+
+                          // Konten log
+                          Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade50,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.grey.shade200),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        _statusLabel(log.status),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      if (log.changedAt != null)
+                                        Text(
+                                          log.changedAt!,
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  if (log.changedBy != null)
+                                    Text(
+                                      'Oleh: ${log.changedBy}',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  if (log.taskDescription != null) ...[
+                                    const SizedBox(height: 6),
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue.shade50,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border(
+                                          left: BorderSide(
+                                            color: Colors.blue.shade400,
+                                            width: 3,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Tindakan: ${log.taskDescription}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.blue.shade800,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                  if (log.notes != null) ...[
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Catatan: ${log.notes}',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ],
                 ],
               ),
             ),
@@ -204,5 +339,17 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
         ],
       ),
     );
+  }
+
+  // Helper method di dalam _ReportDetailScreenState:
+  String _statusLabel(String status) {
+    const labels = {
+      'diterima': 'Diterima',
+      'ditinjau': 'Ditinjau',
+      'in_progress': 'In Progress',
+      'selesai': 'Selesai',
+      'ditolak': 'Ditolak',
+    };
+    return labels[status] ?? status;
   }
 }
