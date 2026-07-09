@@ -1,3 +1,27 @@
+class StatusLog {
+  final String status;
+  final String? notes;
+  final String? taskDescription;
+  final String? changedBy;
+  final String? changedAt;
+
+  StatusLog({
+    required this.status,
+    this.notes,
+    this.taskDescription,
+    this.changedBy,
+    this.changedAt,
+  });
+
+  factory StatusLog.fromJson(Map<String, dynamic> json) => StatusLog(
+    status:          json['status'] ?? '',
+    notes:           json['notes'],
+    taskDescription: json['task_description'],
+    changedBy:       json['changed_by'],
+    changedAt:       json['changed_at'],
+  );
+}
+
 class ReportModel {
   final int id;
   final String title;
@@ -10,6 +34,8 @@ class ReportModel {
   final double? longitude;
   final String createdAt;
   final String userName;
+  final String urgency;
+  final List<StatusLog> statusLogs;
 
   ReportModel({
     required this.id,
@@ -23,6 +49,8 @@ class ReportModel {
     this.longitude,
     required this.createdAt,
     required this.userName,
+    this.urgency = 'normal',
+    this.statusLogs = const [],
   });
 
   factory ReportModel.fromJson(Map<String, dynamic> json) => ReportModel(
@@ -41,5 +69,9 @@ class ReportModel {
                        : null,
     createdAt:       json['created_at'] ?? '',
     userName:        json['user']?['name'] ?? '',
+    urgency:         json['urgency'] ?? 'normal',
+    statusLogs:      (json['status_logs'] as List<dynamic>? ?? [])
+                         .map((l) => StatusLog.fromJson(l))
+                         .toList(),
   );
 }
