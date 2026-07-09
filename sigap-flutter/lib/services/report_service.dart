@@ -103,14 +103,25 @@ class ReportService {
     return jsonDecode(res.body);
   }
 
-  // Ambil kategori
   Future<List<dynamic>> getCategories() async {
     final headers = await _headers();
-    final res = await http.get(
-      Uri.parse('${AppConfig.baseUrl}/categories'),
-      headers: headers,
-    );
+    final url = Uri.parse('${AppConfig.baseUrl}/categories');
+    // ignore: avoid_print
+    print('[getCategories] GET $url');
+    // ignore: avoid_print
+    print('[getCategories] headers: $headers');
+    final res = await http.get(url, headers: headers);
+    // ignore: avoid_print
+    print('[getCategories] status: ${res.statusCode}');
+    // ignore: avoid_print
+    print('[getCategories] body: ${res.body}');
     final data = jsonDecode(res.body);
-    return data['data'] ?? [];
+    if (data is Map<String, dynamic>) {
+      return data['data'] ?? [];
+    }
+    if (data is List) {
+      return data;
+    }
+    return [];
   }
 }

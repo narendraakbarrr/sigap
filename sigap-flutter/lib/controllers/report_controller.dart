@@ -13,7 +13,6 @@ class ReportController extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
 
-  // ── Fetch semua laporan ───────────────────────────────────────
   Future<void> fetchReports() async {
     isLoading = true;
     notifyListeners();
@@ -27,7 +26,6 @@ class ReportController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Fetch detail laporan ──────────────────────────────────────
   Future<void> fetchReportDetail(int id) async {
     isLoading = true;
     selectedReport = null;
@@ -42,7 +40,6 @@ class ReportController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Buat laporan baru ─────────────────────────────────────────
   Future<bool> createReport({
     required String title,
     required String description,
@@ -91,11 +88,16 @@ class ReportController extends ChangeNotifier {
         locationAddress: locationAddress,
       );
 
-      if (data['id'] != null) {
-        // Update data di list lokal supaya tidak perlu fetch ulang
+      final report = data['data'] ?? data;
+
+      if (report is Map<String, dynamic> && report['id'] != null) {
+
         final idx = reports.indexWhere((r) => r.id == id);
         if (idx != -1) {
-          reports[idx] = ReportModel.fromJson(data);
+          reports[idx] = ReportModel.fromJson(report);
+        }
+        if (selectedReport?.id == id) {
+          selectedReport = ReportModel.fromJson(report);
         }
         isLoading = false;
         notifyListeners();
@@ -114,7 +116,6 @@ class ReportController extends ChangeNotifier {
     }
   }
 
-  // ── Hapus laporan ─────────────────────────────────────────────
   Future<bool> deleteReport(int id) async {
     isLoading = true;
     notifyListeners();
@@ -132,14 +133,25 @@ class ReportController extends ChangeNotifier {
     }
   }
 
-  // ── Fetch kategori ────────────────────────────────────────────
+  bool isLoadingCategories = false;
+  String? categoryError;
+
   Future<void> fetchCategories() async {
+    isLoadingCategories = true;
+    categoryError = null;
+    notifyListeners();
     try {
       final data = await _service.getCategories();
       categories = data.map((j) => CategoryModel.fromJson(j)).toList();
-      notifyListeners();
-    } catch (e) {
-      errorMessage = 'Gagal memuat kategori';
+    } catch (e, st) {
+      // ignore: avoid_print
+      print('[fetchCategories] ERROR: $e');
+      // ignore: avoid_print
+      print(st);
+      categoryError = 'Gagal memuat kategori';
+      errorMessage = categoryError;
     }
+    isLoadingCategories = false;
+    notifyListeners();
   }
 }
