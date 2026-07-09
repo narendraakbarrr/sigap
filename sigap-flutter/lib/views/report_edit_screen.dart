@@ -32,7 +32,7 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
       await ctrl.fetchCategories();
 
       // Set kategori yang sudah dipilih sebelumnya
-      if (mounted) {
+      if (mounted && ctrl.categories.isNotEmpty) {
         setState(() {
           _selectedCategory = ctrl.categories.firstWhere(
             (c) => c.name == widget.report.categoryName,
@@ -153,9 +153,23 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
 
             // Kategori
             _label('Kategori *'),
-            ctrl.categories.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : DropdownButtonFormField<CategoryModel>(
+            if (ctrl.isLoadingCategories)
+              const Center(child: CircularProgressIndicator())
+            else if (ctrl.categoryError != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(ctrl.categoryError!,
+                      style: const TextStyle(color: Colors.red)),
+                  const SizedBox(height: 8),
+                  OutlinedButton(
+                    onPressed: () => context.read<ReportController>().fetchCategories(),
+                    child: const Text('Coba lagi'),
+                  ),
+                ],
+              )
+            else
+              DropdownButtonFormField<CategoryModel>(
                     value: _selectedCategory,
                     hint: const Text('Pilih kategori'),
                     decoration: const InputDecoration(

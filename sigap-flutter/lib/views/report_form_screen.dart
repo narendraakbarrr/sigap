@@ -130,9 +130,23 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
 
             // Kategori
             _label('Kategori *'),
-            ctrl.categories.isEmpty
-                ? const CircularProgressIndicator()
-                : DropdownButtonFormField<CategoryModel>(
+            if (ctrl.isLoadingCategories)
+              const Center(child: CircularProgressIndicator())
+            else if (ctrl.categoryError != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(ctrl.categoryError!,
+                      style: const TextStyle(color: Colors.red)),
+                  const SizedBox(height: 8),
+                  OutlinedButton(
+                    onPressed: () => context.read<ReportController>().fetchCategories(),
+                    child: const Text('Coba lagi'),
+                  ),
+                ],
+              )
+            else
+              DropdownButtonFormField<CategoryModel>(
                     value: _selectedCategory,
                     hint: const Text('Pilih kategori'),
                     decoration: const InputDecoration(
