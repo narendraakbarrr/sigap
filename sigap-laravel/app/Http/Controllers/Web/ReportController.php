@@ -86,4 +86,34 @@ class ReportController extends Controller
             ->route('admin.reports.index')
             ->with('success', 'Laporan berhasil dihapus.');
     }
+
+    // Halaman laporan yang sudah dihapus (trash)
+    public function trash()
+    {
+        $reports = Report::onlyTrashed()
+            ->with(['user', 'category'])
+            ->latest('deleted_at')
+            ->paginate(10);
+        return view('admin.reports.trash', compact('reports'));
+    }
+
+    // Restore laporan dari trash
+    public function restore($id)
+    {
+        $report = Report::onlyTrashed()->findOrFail($id);
+        $report->restore();
+        return redirect()
+            ->route('admin.reports.trash')
+            ->with('success', 'Laporan berhasil dipulihkan.');
+    }
+
+    // Hapus permanen
+    public function forceDelete($id)
+    {
+        $report = Report::onlyTrashed()->findOrFail($id);
+        $report->forceDelete();
+        return redirect()
+            ->route('admin.reports.trash')
+            ->with('success', 'Laporan berhasil dihapus permanen.');
+    }
 }

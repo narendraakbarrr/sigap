@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
+
     Route::middleware(['role:admin'])
         ->prefix('admin')
         ->name('admin.')
@@ -38,6 +39,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/reports', [ReportController::class, 'index'])
                 ->name('reports.index');
 
+            Route::get('/reports/trash', [ReportController::class, 'trash'])
+                ->name('reports.trash');
+
             Route::get('/reports/{report}', [ReportController::class, 'show'])
                 ->name('reports.show');
 
@@ -47,16 +51,23 @@ Route::middleware('auth')->group(function () {
             Route::delete('/reports/{report}', [ReportController::class, 'destroy'])
                 ->name('reports.destroy');
 
-            Route::get('/users',                   [UserController::class, 'index'])
+            Route::put('/reports/{id}/restore', [ReportController::class, 'restore'])
+                ->name('reports.restore');
+
+            Route::delete('/reports/{id}/force', [ReportController::class, 'forceDelete'])
+                ->name('reports.forceDelete');
+            // --- end reports ---
+
+            Route::get('/users', [UserController::class, 'index'])
                 ->name('users.index');
 
-            Route::get('/users/{user}',            [UserController::class, 'show'])
+            Route::get('/users/{user}', [UserController::class, 'show'])
                 ->name('users.show');
 
-            Route::put('/users/{user}/role',       [UserController::class, 'updateRole'])
+            Route::put('/users/{user}/role', [UserController::class, 'updateRole'])
                 ->name('users.updateRole');
-                
-            Route::delete('/users/{user}',         [UserController::class, 'destroy'])
+
+            Route::delete('/users/{user}', [UserController::class, 'destroy'])
                 ->name('users.destroy');
         });
 
