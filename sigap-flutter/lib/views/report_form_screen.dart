@@ -12,18 +12,18 @@ class ReportFormScreen extends StatefulWidget {
 }
 
 class _ReportFormScreenState extends State<ReportFormScreen> {
-  final _titleCtrl    = TextEditingController();
-  final _descCtrl     = TextEditingController();
+  final _titleCtrl = TextEditingController();
+  final _descCtrl = TextEditingController();
   final _locationCtrl = TextEditingController();
   File? _selectedPhoto;
   CategoryModel? _selectedCategory;
+  String _selectedUrgency = 'normal';
   bool _isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        context.read<ReportController>().fetchCategories());
+    Future.microtask(() => context.read<ReportController>().fetchCategories());
   }
 
   @override
@@ -37,7 +37,9 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
   Future<void> _pickPhoto() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(
-        source: ImageSource.camera, imageQuality: 70);
+      source: ImageSource.camera,
+      imageQuality: 70,
+    );
     if (picked != null) {
       setState(() => _selectedPhoto = File(picked.path));
     }
@@ -46,7 +48,9 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
   Future<void> _pickFromGallery() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(
-        source: ImageSource.gallery, imageQuality: 70);
+      source: ImageSource.gallery,
+      imageQuality: 70,
+    );
     if (picked != null) {
       setState(() => _selectedPhoto = File(picked.path));
     }
@@ -71,11 +75,12 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
     try {
       final ctrl = context.read<ReportController>();
       final success = await ctrl.createReport(
-        title:           _titleCtrl.text.trim(),
-        description:     _descCtrl.text.trim(),
-        categoryId:      _selectedCategory!.id,
+        title: _titleCtrl.text.trim(),
+        description: _descCtrl.text.trim(),
+        categoryId: _selectedCategory!.id,
         locationAddress: _locationCtrl.text.trim(),
-        photo:           _selectedPhoto,
+        urgency: _selectedUrgency,
+        photo: _selectedPhoto,
       );
 
       if (!mounted) return;
@@ -116,7 +121,6 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // Judul
             _label('Judul Laporan *'),
             TextField(
@@ -136,30 +140,41 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(ctrl.categoryError!,
-                      style: const TextStyle(color: Colors.red)),
+                  Text(
+                    ctrl.categoryError!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                   const SizedBox(height: 8),
                   OutlinedButton(
-                    onPressed: () => context.read<ReportController>().fetchCategories(),
+                    onPressed: () =>
+                        context.read<ReportController>().fetchCategories(),
                     child: const Text('Coba lagi'),
                   ),
                 ],
               )
             else
               DropdownButtonFormField<CategoryModel>(
-                    value: _selectedCategory,
-                    hint: const Text('Pilih kategori'),
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder()),
-                    items: ctrl.categories
-                        .map((c) => DropdownMenuItem(
-                              value: c,
-                              child: Text(c.name),
-                            ))
-                        .toList(),
-                    onChanged: (val) =>
-                        setState(() => _selectedCategory = val),
-                  ),
+                value: _selectedCategory,
+                hint: const Text('Pilih kategori'),
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+                items: ctrl.categories
+                    .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
+                    .toList(),
+                onChanged: (val) => setState(() => _selectedCategory = val),
+              ),
+            const SizedBox(height: 16),
+
+            _label('Urgensi *'),
+            DropdownButtonFormField<String>(
+              value: _selectedUrgency,
+              decoration: const InputDecoration(border: OutlineInputBorder()),
+              items: const [
+                DropdownMenuItem(value: 'normal', child: Text('Normal')),
+                DropdownMenuItem(value: 'penting', child: Text('Penting')),
+                DropdownMenuItem(value: 'darurat', child: Text('Darurat 🚨')),
+              ],
+              onChanged: (val) => setState(() => _selectedUrgency = val!),
+            ),
             const SizedBox(height: 16),
 
             // Deskripsi
@@ -209,13 +224,16 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.file(_selectedPhoto!,
-                        height: 150,
-                        width: double.infinity,
-                        fit: BoxFit.cover),
+                    child: Image.file(
+                      _selectedPhoto!,
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   Positioned(
-                    top: 4, right: 4,
+                    top: 4,
+                    right: 4,
                     child: GestureDetector(
                       onTap: () => setState(() => _selectedPhoto = null),
                       child: Container(
@@ -223,8 +241,11 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                           color: Colors.red,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.close,
-                            color: Colors.white, size: 20),
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -240,12 +261,14 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
               child: ElevatedButton(
                 onPressed: _isSubmitting ? null : _submit,
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepOrange),
+                  backgroundColor: Colors.deepOrange,
+                ),
                 child: _isSubmitting
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('Kirim Laporan',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 16)),
+                    : const Text(
+                        'Kirim Laporan',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
               ),
             ),
             const SizedBox(height: 16),
@@ -258,9 +281,10 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
   Widget _label(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
-      child: Text(text,
-          style: const TextStyle(
-              fontWeight: FontWeight.w600, fontSize: 14)),
+      child: Text(
+        text,
+        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+      ),
     );
   }
 }
