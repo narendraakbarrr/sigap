@@ -43,6 +43,7 @@ class ReportService {
     required String description,
     required int categoryId,
     required String locationAddress,
+    required String urgency,
     double? latitude,
     double? longitude,
     File? photo,
@@ -60,6 +61,7 @@ class ReportService {
     request.fields['description'] = description;
     request.fields['category_id'] = categoryId.toString();
     request.fields['location_address'] = locationAddress;
+    request.fields['urgency'] = urgency;
     if (latitude != null) request.fields['latitude'] = latitude.toString();
     if (longitude != null) request.fields['longitude'] = longitude.toString();
 

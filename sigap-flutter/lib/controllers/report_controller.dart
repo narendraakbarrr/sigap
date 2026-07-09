@@ -45,6 +45,7 @@ class ReportController extends ChangeNotifier {
     required String description,
     required int categoryId,
     required String locationAddress,
+    required String urgency,
     File? photo,
   }) async {
     isLoading = true;
@@ -56,6 +57,7 @@ class ReportController extends ChangeNotifier {
         description: description,
         categoryId: categoryId,
         locationAddress: locationAddress,
+        urgency: urgency,
         photo: photo,
       );
       isLoading = false;
@@ -91,7 +93,6 @@ class ReportController extends ChangeNotifier {
       final report = data['data'] ?? data;
 
       if (report is Map<String, dynamic> && report['id'] != null) {
-
         final idx = reports.indexWhere((r) => r.id == id);
         if (idx != -1) {
           reports[idx] = ReportModel.fromJson(report);
