@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProfileController;
 
 Route::prefix('v1')->group(function () {
 
@@ -23,5 +24,8 @@ Route::prefix('v1')->group(function () {
 
         // Categories (read-only untuk Flutter)
         Route::get('categories', [CategoryController::class, 'index']);
+
+        Route::get('/profile',  [ProfileController::class, 'show']);
+        Route::put('/profile',  [ProfileController::class, 'update']);
     });
 });
