@@ -10,9 +10,9 @@
 
             {{-- Flash message --}}
             @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
-                    {{ session('success') }}
-                </div>
+            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
+                {{ session('success') }}
+            </div>
             @endif
 
             {{-- Search & Filter --}}
@@ -25,19 +25,19 @@
                     <select name="status" class="border rounded-lg px-3 py-2 text-sm">
                         <option value="">Semua Status</option>
                         @foreach (['diterima', 'diproses', 'selesai', 'ditolak'] as $s)
-                            <option value="{{ $s }}" {{ request('status') == $s ? 'selected' : '' }}>
-                                {{ ucfirst($s) }}
-                            </option>
+                        <option value="{{ $s }}" {{ request('status') == $s ? 'selected' : '' }}>
+                            {{ ucfirst($s) }}
+                        </option>
                         @endforeach
                     </select>
 
                     <select name="category_id" class="border rounded-lg px-3 py-2 text-sm">
                         <option value="">Semua Kategori</option>
                         @foreach ($categories as $cat)
-                            <option value="{{ $cat->id }}"
-                                {{ request('category_id') == $cat->id ? 'selected' : '' }}>
-                                {{ $cat->name }}
-                            </option>
+                        <option value="{{ $cat->id }}"
+                            {{ request('category_id') == $cat->id ? 'selected' : '' }}>
+                            {{ $cat->name }}
+                        </option>
                         @endforeach
                     </select>
 
@@ -49,6 +49,12 @@
                         Reset
                     </a>
                 </form>
+            </div>
+            <div class="flex justify-end mb-2">
+                <a href="{{ route('admin.reports.trash') }}"
+                    class="text-sm text-red-600 hover:underline flex items-center gap-1">
+                    🗑 Lihat Laporan Terhapus
+                </a>
             </div>
 
             {{-- Tabel --}}
@@ -66,53 +72,54 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @forelse($reports as $report)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 font-medium">
-                                    {{ Str::limit($report->title, 40) }}
-                                </td>
-                                <td class="px-4 py-3">{{ $report->user->name }}</td>
-                                <td class="px-4 py-3">{{ $report->category->name }}</td>
-                                <td class="px-4 py-3">
-                                    @php
-                                        $colors = [
-                                            'diterima' => 'bg-blue-100 text-blue-700',
-                                            'diproses' => 'bg-yellow-100 text-yellow-700',
-                                            'selesai' => 'bg-green-100 text-green-700',
-                                            'ditolak' => 'bg-red-100 text-red-700',
-                                        ];
-                                    @endphp
-                                    <span
-                                        class="px-2 py-1 rounded-full text-xs font-medium
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">
+                                {{ Str::limit($report->title, 40) }}
+                            </td>
+                            <td class="px-4 py-3">{{ $report->user->name }}</td>
+                            <td class="px-4 py-3">{{ $report->category->name }}</td>
+                            <td class="px-4 py-3">
+                                @php
+                                $colors = [
+                                'diterima' => 'bg-blue-100 text-blue-700',
+                                'diproses' => 'bg-yellow-100 text-yellow-700',
+                                'selesai' => 'bg-green-100 text-green-700',
+                                'ditolak' => 'bg-red-100 text-red-700',
+                                ];
+                                @endphp
+                                <span
+                                    class="px-2 py-1 rounded-full text-xs font-medium
                                     {{ $colors[$report->status] ?? '' }}">
-                                        {{ ucfirst($report->status) }}
-                                    </span>
-                                </td>
-                                <td class="px-4 py-3 text-gray-500">
-                                    {{ $report->created_at->format('d M Y') }}
-                                </td>
-                                <td class="px-4 py-3 flex gap-2">
-                                    <a href="{{ route('admin.reports.show', $report) }}"
-                                        class="text-blue-600 hover:underline text-xs">
-                                        Detail
-                                    </a>
-                                    <form method="POST" action="{{ route('admin.reports.destroy', $report) }}"
-                                        onsubmit="return confirm('Hapus laporan ini?')">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:underline text-xs">
-                                            Hapus
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
+                                    {{ ucfirst($report->status) }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-gray-500">
+                                {{ $report->created_at->format('d M Y') }}
+                            </td>
+                            <td class="px-4 py-3 flex gap-2">
+                                <a href="{{ route('admin.reports.show', $report) }}"
+                                    class="text-blue-600 hover:underline text-xs">
+                                    Detail
+                                </a>
+                                <form method="POST" action="{{ route('admin.reports.destroy', $report) }}"
+                                    onsubmit="return confirm('Hapus laporan ini?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:underline text-xs">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="6" class="px-4 py-8 text-center text-gray-400">
-                                    Tidak ada laporan ditemukan.
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="6" class="px-4 py-8 text-center text-gray-400">
+                                Tidak ada laporan ditemukan.
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
+
 
                 {{-- Pagination --}}
                 <div class="px-4 py-3 border-t">
