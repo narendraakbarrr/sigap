@@ -7,73 +7,127 @@ import 'dart:io';
 class ReportController extends ChangeNotifier {
   final _service = ReportService();
 
-  List<ReportModel>    reports    = [];
-  List<CategoryModel>  categories = [];
-  ReportModel?         selectedReport;
-  bool                 isLoading  = false;
-  String?              errorMessage;
+  List<ReportModel> reports = [];
+  List<CategoryModel> categories = [];
+  ReportModel? selectedReport;
+  bool isLoading = false;
+  String? errorMessage;
 
   // ── Fetch semua laporan ───────────────────────────────────────
   Future<void> fetchReports() async {
-    isLoading = true; notifyListeners();
+    isLoading = true;
+    notifyListeners();
     try {
       final data = await _service.getReports();
       reports = data.map((j) => ReportModel.fromJson(j)).toList();
     } catch (e) {
       errorMessage = 'Gagal memuat laporan';
     }
-    isLoading = false; notifyListeners();
+    isLoading = false;
+    notifyListeners();
   }
 
   // ── Fetch detail laporan ──────────────────────────────────────
   Future<void> fetchReportDetail(int id) async {
-    isLoading = true; selectedReport = null; notifyListeners();
+    isLoading = true;
+    selectedReport = null;
+    notifyListeners();
     try {
       final data = await _service.getReport(id);
       selectedReport = ReportModel.fromJson(data['data'] ?? data);
     } catch (e) {
       errorMessage = 'Gagal memuat detail laporan';
     }
-    isLoading = false; notifyListeners();
+    isLoading = false;
+    notifyListeners();
   }
 
   // ── Buat laporan baru ─────────────────────────────────────────
   Future<bool> createReport({
     required String title,
     required String description,
-    required int    categoryId,
+    required int categoryId,
     required String locationAddress,
-    File?           photo,
+    File? photo,
   }) async {
-    isLoading = true; errorMessage = null; notifyListeners();
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
     try {
       final data = await _service.createReport(
-        title:           title,
-        description:     description,
-        categoryId:      categoryId,
+        title: title,
+        description: description,
+        categoryId: categoryId,
         locationAddress: locationAddress,
-        photo:           photo,
+        photo: photo,
       );
-      isLoading = false; notifyListeners();
+      isLoading = false;
+      notifyListeners();
       return data['id'] != null || data['data'] != null;
     } catch (e) {
       errorMessage = 'Gagal mengirim laporan';
-      isLoading = false; notifyListeners();
+      isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> updateReport({
+    required int id,
+    required String title,
+    required String description,
+    required int categoryId,
+    required String locationAddress,
+  }) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      final data = await _service.updateReport(
+        id: id,
+        title: title,
+        description: description,
+        categoryId: categoryId,
+        locationAddress: locationAddress,
+      );
+
+      if (data['id'] != null) {
+        // Update data di list lokal supaya tidak perlu fetch ulang
+        final idx = reports.indexWhere((r) => r.id == id);
+        if (idx != -1) {
+          reports[idx] = ReportModel.fromJson(data);
+        }
+        isLoading = false;
+        notifyListeners();
+        return true;
+      }
+
+      errorMessage = data['message'] ?? 'Gagal memperbarui laporan';
+      isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      errorMessage = 'Tidak dapat terhubung ke server';
+      isLoading = false;
+      notifyListeners();
       return false;
     }
   }
 
   // ── Hapus laporan ─────────────────────────────────────────────
   Future<bool> deleteReport(int id) async {
-    isLoading = true; notifyListeners();
+    isLoading = true;
+    notifyListeners();
     try {
       await _service.deleteReport(id);
       reports.removeWhere((r) => r.id == id);
-      isLoading = false; notifyListeners();
+      isLoading = false;
+      notifyListeners();
       return true;
     } catch (e) {
       errorMessage = 'Gagal menghapus laporan';
-      isLoading = false; notifyListeners();
+      isLoading = false;
+      notifyListeners();
       return false;
     }
   }
@@ -81,8 +135,8 @@ class ReportController extends ChangeNotifier {
   // ── Fetch kategori ────────────────────────────────────────────
   Future<void> fetchCategories() async {
     try {
-      final data  = await _service.getCategories();
-      categories  = data.map((j) => CategoryModel.fromJson(j)).toList();
+      final data = await _service.getCategories();
+      categories = data.map((j) => CategoryModel.fromJson(j)).toList();
       notifyListeners();
     } catch (e) {
       errorMessage = 'Gagal memuat kategori';
