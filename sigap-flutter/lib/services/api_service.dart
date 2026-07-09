@@ -24,15 +24,15 @@ class ApiService {
   Future<Map<String, String>> _authHeaders() async {
     final token = await getToken();
     return {
-      'Content-Type':  'application/json',
-      'Accept':        'application/json',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     };
   }
 
   Map<String, String> get _publicHeaders => {
     'Content-Type': 'application/json',
-    'Accept':       'application/json',
+    'Accept': 'application/json',
   };
 
   Future<Map<String, dynamic>> login(String email, String password) async {
@@ -45,14 +45,17 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> register(
-      String name, String email, String password) async {
+    String name,
+    String email,
+    String password,
+  ) async {
     final res = await http.post(
       Uri.parse('${AppConfig.baseUrl}/register'),
       headers: _publicHeaders,
       body: jsonEncode({
-        'name':                  name,
-        'email':                 email,
-        'password':              password,
+        'name': name,
+        'email': email,
+        'password': password,
         'password_confirmation': password,
       }),
     );
@@ -61,10 +64,7 @@ class ApiService {
 
   Future<void> logout() async {
     final headers = await _authHeaders();
-    await http.post(
-      Uri.parse('${AppConfig.baseUrl}/logout'),
-      headers: headers,
-    );
+    await http.post(Uri.parse('${AppConfig.baseUrl}/logout'), headers: headers);
     await removeToken();
   }
 
@@ -73,6 +73,16 @@ class ApiService {
     final res = await http.get(
       Uri.parse('${AppConfig.baseUrl}/me'),
       headers: headers,
+    );
+    return jsonDecode(res.body);
+  }
+
+  Future<Map<String, dynamic>> updateProfile({required String name}) async {
+    final headers = await _authHeaders();
+    final res = await http.put(
+      Uri.parse('${AppConfig.baseUrl}/profile'),
+      headers: headers,
+      body: jsonEncode({'name': name}),
     );
     return jsonDecode(res.body);
   }
