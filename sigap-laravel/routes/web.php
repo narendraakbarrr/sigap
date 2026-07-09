@@ -27,6 +27,10 @@ Route::middleware('auth')->group(function () {
         ->prefix('admin')
         ->name('admin.')
         ->group(function () {
+
+            Route::get('/dashboard', [DashboardController::class, 'index'])
+                ->name('dashboard');
+
             Route::resource('categories', CategoryController::class)
                 ->except(['show']);
 
