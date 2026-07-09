@@ -10,8 +10,8 @@ class ReportService {
   Future<Map<String, String>> _headers() async {
     final token = await _api.getToken();
     return {
-      'Content-Type':  'application/json',
-      'Accept':        'application/json',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     };
   }
@@ -53,14 +53,14 @@ class ReportService {
       Uri.parse('${AppConfig.baseUrl}/reports'),
     );
     request.headers.addAll({
-      'Accept':        'application/json',
+      'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
-    request.fields['title']            = title;
-    request.fields['description']      = description;
-    request.fields['category_id']      = categoryId.toString();
+    request.fields['title'] = title;
+    request.fields['description'] = description;
+    request.fields['category_id'] = categoryId.toString();
     request.fields['location_address'] = locationAddress;
-    if (latitude != null)  request.fields['latitude']  = latitude.toString();
+    if (latitude != null) request.fields['latitude'] = latitude.toString();
     if (longitude != null) request.fields['longitude'] = longitude.toString();
 
     if (photo != null) {
@@ -68,7 +68,28 @@ class ReportService {
     }
 
     final streamed = await request.send();
-    final res      = await http.Response.fromStream(streamed);
+    final res = await http.Response.fromStream(streamed);
+    return jsonDecode(res.body);
+  }
+
+  Future<Map<String, dynamic>> updateReport({
+    required int id,
+    required String title,
+    required String description,
+    required int categoryId,
+    required String locationAddress,
+  }) async {
+    final headers = await _headers();
+    final res = await http.put(
+      Uri.parse('${AppConfig.baseUrl}/reports/$id'),
+      headers: headers,
+      body: jsonEncode({
+        'title': title,
+        'description': description,
+        'category_id': categoryId,
+        'location_address': locationAddress,
+      }),
+    );
     return jsonDecode(res.body);
   }
 
