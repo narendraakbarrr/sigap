@@ -8,12 +8,7 @@
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- Flash message --}}
-            @if (session('success'))
-            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
-                {{ session('success') }}
-            </div>
-            @endif
+            {{-- Flash message handled by layouts partial --}}
 
             {{-- Search & Filter --}}
             <div class="bg-white shadow-sm rounded-lg p-4 mb-4">
@@ -24,9 +19,9 @@
 
                     <select name="status" class="border rounded-lg px-3 py-2 text-sm">
                         <option value="">Semua Status</option>
-                        @foreach (['diterima', 'diproses', 'selesai', 'ditolak'] as $s)
-                        <option value="{{ $s }}" {{ request('status') == $s ? 'selected' : '' }}>
-                            {{ ucfirst($s) }}
+                        @foreach (\App\Models\Report::STATUS_LABELS as $value => $label)
+                        <option value="{{ $value }}" {{ request('status') == $value ? 'selected' : '' }}>
+                            {{ $label }}
                         </option>
                         @endforeach
                     </select>
@@ -65,6 +60,7 @@
                             <th class="px-4 py-3">Judul</th>
                             <th class="px-4 py-3">Pelapor</th>
                             <th class="px-4 py-3">Kategori</th>
+                            <th class="px-4 py-3">Urgensi</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3">Tanggal</th>
                             <th class="px-4 py-3">Aksi</th>
@@ -79,18 +75,15 @@
                             <td class="px-4 py-3">{{ $report->user->name }}</td>
                             <td class="px-4 py-3">{{ $report->category->name }}</td>
                             <td class="px-4 py-3">
-                                @php
-                                $colors = [
-                                'diterima' => 'bg-blue-100 text-blue-700',
-                                'diproses' => 'bg-yellow-100 text-yellow-700',
-                                'selesai' => 'bg-green-100 text-green-700',
-                                'ditolak' => 'bg-red-100 text-red-700',
-                                ];
-                                @endphp
+                                <span class="px-2 py-1 rounded-full text-xs font-medium {{ \App\Models\Report::URGENCY_COLORS[$report->urgency] ?? '' }}">
+                                    {{ \App\Models\Report::URGENCY_LABELS[$report->urgency] ?? '-' }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3">
                                 <span
                                     class="px-2 py-1 rounded-full text-xs font-medium
-                                    {{ $colors[$report->status] ?? '' }}">
-                                    {{ ucfirst($report->status) }}
+                                    {{ \App\Models\Report::STATUS_COLORS[$report->status] ?? '' }}">
+                                    {{ \App\Models\Report::STATUS_LABELS[$report->status] ?? $report->status }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-gray-500">

@@ -29,7 +29,8 @@
 
             <!-- Page Content -->
             <main>
-                {{ $slot }}
+                @include('partials.flash-message')
+                {{ $slot ?? '' }}
             </main>
         </div>
     </body>

@@ -10,11 +10,7 @@
     <div class="py-8">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            @if(session('success'))
-                <div class="p-4 bg-green-100 text-green-800 rounded-lg">
-                    {{ session('success') }}
-                </div>
-            @endif
+            {{-- Flash message handled by layouts partial --}}
 
             {{-- Info pengguna --}}
             <div class="bg-white shadow-sm rounded-lg p-6">

@@ -14,11 +14,7 @@
     <div class="py-8">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
 
-            @if(session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
-                    {{ session('success') }}
-                </div>
-            @endif
+                {{-- Flash message handled by layouts partial --}}
             @if(session('error'))
                 <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
                     {{ session('error') }}

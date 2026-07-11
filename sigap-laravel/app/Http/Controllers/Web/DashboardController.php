@@ -51,12 +51,17 @@ class DashboardController extends Controller
             ->get();
 
         // Data grafik — laporan per kategori
-        $perKategori = ReportCategory::withCount('reports')
-            ->get()
-            ->map(fn($c) => [
-                'name'  => $c->name,
-                'count' => $c->reports_count,
-            ]);
+        $categoryStats = ReportCategory::withCount('reports')
+            ->orderByDesc('reports_count')
+            ->get();
+        $topCategories = $categoryStats->take(5);
+        $otherCategories = $categoryStats->slice(5);
+
+        // also provide the older `perKategori` shape for views that still expect it
+        $perKategori = $categoryStats->map(fn($c) => [
+            'name'  => $c->name,
+            'count' => $c->reports_count,
+        ]);
 
         // Data grafik — laporan per hari (7 hari terakhir)
         $perHari = Report::select(
@@ -77,7 +82,9 @@ class DashboardController extends Controller
             'laporanTerbaru',
             'laporanDarurat',
             'perKategori',
-            'perHari'
+            'perHari',
+            'topCategories',
+            'otherCategories'
         ));
     }
 
@@ -88,8 +95,10 @@ class DashboardController extends Controller
         $stats = [
             'total'       => $myReports->count(),
             'diterima'    => (clone $myReports)->where('status', 'diterima')->count(),
+            'ditinjau'    => (clone $myReports)->where('status', 'ditinjau')->count(),
             'in_progress' => (clone $myReports)->where('status', 'in_progress')->count(),
             'selesai'     => (clone $myReports)->where('status', 'selesai')->count(),
+            'ditolak'     => (clone $myReports)->where('status', 'ditolak')->count(),
         ];
 
         $laporanTerbaru = Report::with(['category'])
@@ -98,6 +107,10 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('dashboard', compact('stats', 'laporanTerbaru', 'user'));
+        $categoryStats = ReportCategory::withCount('reports')->orderByDesc('reports_count')->get();
+        $topCategories = $categoryStats->take(5);
+        $otherCategories = $categoryStats->slice(5);
+
+        return view('dashboard', compact('stats', 'laporanTerbaru', 'user', 'topCategories', 'otherCategories'));
     }
 }
