@@ -43,6 +43,43 @@ class ReportController extends Controller
         return view('admin.reports.index', compact('reports', 'categories'));
     }
 
+    // Daftar laporan milik user (halaman "Laporan Saya")
+    public function userIndex(Request $request)
+    {
+        $userId = auth()->id();
+
+        $query = Report::with(['category'])
+            ->where('user_id', $userId)
+            ->withTrashed(false);
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $reports = $query->latest()->paginate(10)->withQueryString();
+
+        $stats = [
+            'total'       => Report::where('user_id', $userId)->count(),
+            'diterima'    => Report::where('user_id', $userId)->where('status', 'diterima')->count(),
+            'ditinjau'    => Report::where('user_id', $userId)->where('status', 'ditinjau')->count(),
+            'in_progress' => Report::where('user_id', $userId)->where('status', 'in_progress')->count(),
+            'selesai'     => Report::where('user_id', $userId)->where('status', 'selesai')->count(),
+            'ditolak'     => Report::where('user_id', $userId)->where('status', 'ditolak')->count(),
+        ];
+
+        $categories = ReportCategory::all();
+
+        return view('user.reports.index', compact('reports', 'stats', 'categories'));
+    }
+
     // Detail satu laporan
     public function show(Report $report)
     {

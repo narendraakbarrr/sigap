@@ -75,9 +75,8 @@ Route::middleware('auth')->group(function () {
         ->prefix('user')
         ->name('user.')
         ->group(function () {
-            Route::get('/reports', function () {
-                return view('dashboard');
-            })->name('reports.index');
+            Route::get('/reports', [\App\Http\Controllers\Web\ReportController::class, 'userIndex'])
+                ->name('reports.index');
         });
 });
 

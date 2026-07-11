@@ -10,7 +10,7 @@
 
             {{-- Statistik utama --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                @foreach ([['label' => 'Total Laporan', 'value' => $stats['total'], 'color' => 'blue'], ['label' => 'In Progress', 'value' => $stats['in_progress'], 'color' => 'yellow'], ['label' => 'Selesai', 'value' => $stats['selesai'], 'color' => 'green'], ['label' => 'Darurat', 'value' => $stats['darurat'], 'color' => 'red']] as $card)
+                @foreach ([['label' => 'Total Laporan', 'value' => $stats['total'], 'color' => 'blue'], ['label' => \App\Models\Report::STATUS_LABELS[\App\Models\Report::STATUS_IN_PROGRESS], 'value' => $stats['in_progress'], 'color' => 'yellow'], ['label' => 'Selesai', 'value' => $stats['selesai'], 'color' => 'green'], ['label' => 'Darurat', 'value' => $stats['darurat'], 'color' => 'red']] as $card)
                     <div
                         class="bg-white rounded-lg shadow-sm p-5 border-l-4
                             border-{{ $card['color'] }}-500">
@@ -53,20 +53,44 @@
                     <h3 class="font-semibold text-gray-700 mb-4">
                         Laporan per Kategori
                     </h3>
-                    @php $maxKat = $perKategori->max('count') ?: 1; @endphp
-                    @foreach ($perKategori as $kat)
-                        <div class="mb-3">
-                            <div class="flex justify-between text-sm mb-1">
-                                <span>{{ $kat['name'] }}</span>
-                                <span class="font-medium">{{ $kat['count'] }}</span>
-                            </div>
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="h-2 rounded-full bg-orange-500"
-                                    style="width: {{ ($kat['count'] / $maxKat) * 100 }}%">
+                    @php $maxKat = $topCategories->max('count') ?: 1; @endphp
+                    <div x-data="{ showAll: false }">
+                        @foreach ($topCategories as $kat)
+                            <div class="mb-3">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>{{ $kat['name'] }}</span>
+                                    <span class="font-medium">{{ $kat['count'] }}</span>
+                                </div>
+                                <div class="w-full bg-gray-100 rounded-full h-2">
+                                    <div class="h-2 rounded-full bg-orange-500"
+                                        style="width: {{ ($kat['count'] / $maxKat) * 100 }}%">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+
+                        @if($otherCategories->count())
+                            <div x-show="showAll" x-transition class="mt-2 space-y-2">
+                                @foreach($otherCategories as $kat)
+                                    <div class="mb-3">
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span>{{ $kat['name'] }}</span>
+                                            <span class="font-medium">{{ $kat['count'] }}</span>
+                                        </div>
+                                        <div class="w-full bg-gray-100 rounded-full h-2">
+                                            <div class="h-2 rounded-full bg-orange-500"
+                                                style="width: {{ ($kat['count'] / $maxKat) * 100 }}%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <button @click="showAll = !showAll" type="button" class="text-sm text-blue-600 mt-2">
+                                <span x-show="!showAll">Tampilkan {{ $otherCategories->count() }} kategori lainnya</span>
+                                <span x-show="showAll" x-cloak>Sembunyikan</span>
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </div>
 

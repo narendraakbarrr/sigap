@@ -10,34 +10,35 @@ class Report extends Model
     use SoftDeletes;
 
     // Konstanta status
-    const STATUS_DITERIMA   = 'diterima';
-    const STATUS_DITINJAU   = 'ditinjau';
-    const STATUS_IN_PROGRESS = 'in_progress';
-    const STATUS_SELESAI    = 'selesai';
-    const STATUS_DITOLAK    = 'ditolak';
+    public const STATUS_DITERIMA   = 'diterima';
+    public const STATUS_DITINJAU   = 'ditinjau';
+    public const STATUS_IN_PROGRESS = 'in_progress';
+    public const STATUS_SELESAI    = 'selesai';
+    public const STATUS_DITOLAK    = 'ditolak';
 
     // Konstanta urgensi
-    const URGENCY_NORMAL  = 'normal';
-    const URGENCY_PENTING = 'penting';
-    const URGENCY_DARURAT = 'darurat';
+    public const URGENCY_NORMAL  = 'normal';
+    public const URGENCY_PENTING = 'penting';
+    public const URGENCY_DARURAT = 'darurat';
 
     // Label untuk tampilan
-    const STATUS_LABELS = [
-        'diterima'    => 'Diterima',
-        'ditinjau'    => 'Ditinjau',
-        'in_progress' => 'In Progress',
-        'selesai'     => 'Selesai',
-        'ditolak'     => 'Ditolak',
-    ];
+    public const STATUS_LABELS = [
+    'diterima'    => 'Diterima',
+    'ditinjau'    => 'Ditinjau',
+    'in_progress' => 'Diproses',
+    'selesai'     => 'Selesai',
+    'ditolak'     => 'Ditolak',
+];
 
-    const URGENCY_LABELS = [
+    public const URGENCY_LABELS = [
         'normal'  => 'Normal',
         'penting' => 'Penting',
         'darurat' => 'Darurat',
     ];
 
+
     // Warna badge per status
-    const STATUS_COLORS = [
+    public const STATUS_COLORS = [
         'diterima'    => 'bg-blue-100 text-blue-700',
         'ditinjau'    => 'bg-purple-100 text-purple-700',
         'in_progress' => 'bg-yellow-100 text-yellow-700',
@@ -46,7 +47,7 @@ class Report extends Model
     ];
 
     // Warna badge per urgensi
-    const URGENCY_COLORS = [
+    public const URGENCY_COLORS = [
         'normal'  => 'bg-gray-100 text-gray-700',
         'penting' => 'bg-orange-100 text-orange-700',
         'darurat' => 'bg-red-100 text-red-700',

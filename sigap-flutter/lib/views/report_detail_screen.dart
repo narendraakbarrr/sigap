@@ -20,6 +20,43 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     );
   }
 
+  Future<void> _deleteReport() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Hapus Laporan'),
+        content: const Text('Apakah Anda yakin ingin menghapus laporan ini?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Hapus'),
+          ),
+        ],
+      ),
+    );
+    if (confirm != true) return;
+
+    final controller = context.read<ReportController>();
+    final success = await controller.deleteReport(widget.reportId);
+    if (!mounted) return;
+
+    if (success) {
+      final messenger = ScaffoldMessenger.of(context);
+      Navigator.pop(context);
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Laporan berhasil dihapus')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gagal menghapus laporan')),
+      );
+    }
+  }
+
   Color _statusColor(String status) {
     switch (status) {
       case 'diterima':
@@ -69,42 +106,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           if (report != null && report.status == 'diterima')
             IconButton(
               icon: const Icon(Icons.delete_outline),
-              onPressed: () async {
-                final confirm = await showDialog<bool>(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('Hapus Laporan?'),
-                    content: const Text(
-                      'Laporan yang dihapus tidak dapat dikembalikan.',
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: const Text('Batal'),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: const Text(
-                          'Hapus',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-                if (confirm == true && context.mounted) {
-                  await ctrl.deleteReport(report.id);
-                  if (context.mounted) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const ReportListScreen(),
-                      ),
-                      (r) => false,
-                    );
-                  }
-                }
-              },
+              onPressed: _deleteReport,
             ),
         ],
       ),
