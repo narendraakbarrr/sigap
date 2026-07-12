@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Announcement;
 use App\Models\Report;
 use App\Models\ReportCategory;
 use App\Models\User;
@@ -111,6 +112,12 @@ class DashboardController extends Controller
         $topCategories = $categoryStats->take(5);
         $otherCategories = $categoryStats->slice(5);
 
-        return view('dashboard', compact('stats', 'laporanTerbaru', 'user', 'topCategories', 'otherCategories'));
+        $announcements = Announcement::query()
+            ->orderByDesc('is_pinned')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('dashboard', compact('stats', 'laporanTerbaru', 'user', 'topCategories', 'otherCategories', 'announcements'));
     }
 }

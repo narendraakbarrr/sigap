@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\ReportController;
 use App\Http\Controllers\Web\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Web\AnnouncementController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -69,6 +70,9 @@ Route::middleware('auth')->group(function () {
 
             Route::delete('/users/{user}', [UserController::class, 'destroy'])
                 ->name('users.destroy');
+
+            Route::resource('announcements', AnnouncementController::class)
+                ->except(['show']);
         });
 
     Route::middleware(['role:user'])

@@ -21,7 +21,7 @@ class ApiService {
     await prefs.remove(_tokenKey);
   }
 
-  Future<Map<String, String>> _authHeaders() async {
+  Future<Map<String, String>> authHeaders() async {
     final token = await getToken();
     return {
       'Content-Type': 'application/json',
@@ -63,13 +63,13 @@ class ApiService {
   }
 
   Future<void> logout() async {
-    final headers = await _authHeaders();
+    final headers = await authHeaders();
     await http.post(Uri.parse('${AppConfig.baseUrl}/logout'), headers: headers);
     await removeToken();
   }
 
   Future<Map<String, dynamic>> getMe() async {
-    final headers = await _authHeaders();
+    final headers = await authHeaders();
     final res = await http.get(
       Uri.parse('${AppConfig.baseUrl}/me'),
       headers: headers,
@@ -78,7 +78,7 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> updateProfile({required String name}) async {
-    final headers = await _authHeaders();
+    final headers = await authHeaders();
     final res = await http.put(
       Uri.parse('${AppConfig.baseUrl}/profile'),
       headers: headers,

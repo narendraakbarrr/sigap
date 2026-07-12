@@ -29,12 +29,13 @@
                             Kategori
                         </x-nav-link>
 
+                        <x-nav-link :href="route('admin.announcements.index')" :active="request()->routeIs('admin.announcements.*')">
+                            Pengumuman
+                        </x-nav-link>
+
                         <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                             Pengguna
                         </x-nav-link>
-
-                        {{-- Akan ditambah nanti-}}
-                        {{-- Pengguna --}}
                     @endrole
 
                     {{-- Menu khusus Warga/User --}}
@@ -116,8 +117,14 @@
                 <x-responsive-nav-link :href="route('admin.reports.index')" :active="request()->routeIs('admin.reports.*')">
                     Laporan
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.announcements.index')" :active="request()->routeIs('admin.announcements.*')">
+                    Pengumuman
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
                     Kategori
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                    Pengguna
                 </x-responsive-nav-link>
             @endrole
 
