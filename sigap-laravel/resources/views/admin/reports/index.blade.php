@@ -17,12 +17,10 @@
                         placeholder="Cari judul, lokasi, atau pelapor..."
                         class="border rounded-lg px-3 py-2 flex-1 min-w-48 text-sm">
 
-                    <select name="status" class="border rounded-lg px-3 py-2 text-sm">
+                    <select name="status" class="...">
                         <option value="">Semua Status</option>
-                        @foreach (\App\Models\Report::STATUS_LABELS as $value => $label)
-                        <option value="{{ $value }}" {{ request('status') == $value ? 'selected' : '' }}>
-                            {{ $label }}
-                        </option>
+                        @foreach(\App\Models\Report::STATUS_LABELS as $value => $label)
+                            <option value="{{ $value }}" @selected(request('status') == $value)>{{ $label }}</option>
                         @endforeach
                     </select>
 

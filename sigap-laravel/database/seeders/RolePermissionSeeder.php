@@ -18,16 +18,18 @@ class RolePermissionSeeder extends Seeder
             ->forgetCachedPermissions();
 
         $permissions = [
-            'view reports','create reports','edit reports','delete reports',
-            'update report status',
-            'view categories','create categories','edit categories','delete categories',
-            'view users','edit users','delete users',
+            'manage-reports', 'manage-categories', 'manage-users', 'view-dashboard',
+            'create-report', 'edit-own-report', 'view-own-reports',
         ];
-        foreach ($permissions as $p) Permission::create(['name' => $p]);
+        foreach ($permissions as $perm) {
+            Permission::firstOrCreate(['name' => $perm]);
+        }
 
-        Role::create(['name' => 'admin'])->givePermissionTo(Permission::all());
-        Role::create(['name' => 'user'])->givePermissionTo([
-            'view reports','create reports','edit reports','delete reports'
-        ]);
+        Role::firstOrCreate(['name' => 'admin'])
+            ->syncPermissions(['manage-reports', 'manage-categories', 'manage-users', 'view-dashboard']);
+
+        Role::firstOrCreate(['name' => 'user'])
+            ->syncPermissions(['create-report', 'edit-own-report', 'view-own-reports']
+        );
     }
 }
