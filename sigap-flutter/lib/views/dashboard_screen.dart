@@ -100,60 +100,77 @@ class DashboardScreen extends StatelessWidget {
                     );
                   }
 
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const SizedBox();
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 420),
+                        child: Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Text(
+                              'Gagal memuat pengumuman. ${snapshot.error}',
+                              style: const TextStyle(color: Colors.redAccent),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
                   }
 
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '📢 Pengumuman',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 420),
+                        child: Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Text(
+                              'Belum ada pengumuman saat ini.',
+                              style: TextStyle(color: Colors.grey.shade600),
+                            ),
                           ),
-                          const SizedBox(height: 8),
-                          ...snapshot.data!
-                              .take(3)
-                              .map(
-                                (a) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 6),
-                                  child: Text(
-                                    '${a.isPinned ? "📌 " : ""}${a.title}',
-                                    style: const TextStyle(fontSize: 14),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 420),
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                '📢 Pengumuman',
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                        ],
+                              const SizedBox(height: 8),
+                              ...snapshot.data!
+                                  .take(3)
+                                  .map(
+                                    (a) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 6),
+                                      child: Text(
+                                        '${a.isPinned ? "📌 " : ""}${a.title}',
+                                        style: const TextStyle(fontSize: 14),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   );
                 },
-              ),
-
-              const Card(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Icon(Icons.task_alt, color: Colors.green, size: 32),
-                      SizedBox(height: 8),
-                      Text(
-                        'Checkpoint 1 selesai',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Flutter → Laravel terhubung ✓',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ),
               ),
               const SizedBox(height: 24),
               ElevatedButton.icon(

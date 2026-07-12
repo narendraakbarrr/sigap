@@ -9,12 +9,7 @@ class Announcement extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'content',
-        'is_pinned',
-        'created_by',
-    ];
+    protected $fillable = ['title', 'content', 'is_pinned', 'created_by'];
 
     protected $casts = [
         'is_pinned' => 'boolean',
