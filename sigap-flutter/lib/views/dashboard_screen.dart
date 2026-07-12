@@ -4,6 +4,8 @@ import '../controllers/auth_controller.dart';
 import 'login_screen.dart';
 import 'report_list_screen.dart';
 import 'profile_screen.dart';
+import '../models/announcement_model.dart';
+import '../services/announcement_service.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -84,6 +86,51 @@ class DashboardScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
+
+              FutureBuilder<List<AnnouncementModel>>(
+                future: AnnouncementService().fetchAnnouncements(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: LinearProgressIndicator(),
+                    );
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const SizedBox();
+                  }
+
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '📢 Pengumuman',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 8),
+                          ...snapshot.data!
+                              .take(3)
+                              .map(
+                                (a) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 6),
+                                  child: Text(
+                                    '${a.isPinned ? "📌 " : ""}${a.title}',
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+
               const Card(
                 child: Padding(
                   padding: EdgeInsets.all(16),
