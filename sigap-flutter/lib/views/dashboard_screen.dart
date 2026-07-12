@@ -47,7 +47,7 @@ class DashboardScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -65,6 +65,9 @@ class DashboardScreen extends StatelessWidget {
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 8),
               Container(
@@ -121,6 +124,8 @@ class DashboardScreen extends StatelessWidget {
                                   child: Text(
                                     '${a.isPinned ? "📌 " : ""}${a.title}',
                                     style: const TextStyle(fontSize: 14),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
