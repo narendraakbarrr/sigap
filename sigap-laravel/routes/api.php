@@ -25,6 +25,8 @@ Route::prefix('v1')->group(function () {
         // Categories (read-only untuk Flutter)
         Route::get('categories', [CategoryController::class, 'index']);
 
+        Route::get('/announcements', [\App\Http\Controllers\Api\AnnouncementController::class, 'index']);
+        
         Route::get('/profile',  [ProfileController::class, 'show']);
         Route::put('/profile',  [ProfileController::class, 'update']);
     });
