@@ -23,7 +23,7 @@
                 @foreach([
                     ['label' => 'Total Laporan',  'value' => $stats['total'],       'color' => 'blue'],
                     ['label' => 'Diterima',        'value' => $stats['diterima'],    'color' => 'purple'],
-                    ['label' => 'In Progress',     'value' => $stats['in_progress'], 'color' => 'yellow'],
+                    ['label' => \App\Models\Report::STATUS_LABELS['in_progress'], 'value' => $stats['in_progress'], 'color' => 'yellow'],
                     ['label' => 'Selesai',         'value' => $stats['selesai'],     'color' => 'green'],
                 ] as $card)
                 <div class="bg-white rounded-lg shadow-sm p-4 border-l-4
