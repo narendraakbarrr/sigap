@@ -55,8 +55,14 @@ class DashboardController extends Controller
         $categoryStats = ReportCategory::withCount('reports')
             ->orderByDesc('reports_count')
             ->get();
-        $topCategories = $categoryStats->take(5);
-        $otherCategories = $categoryStats->slice(5);
+        $topCategories = $categoryStats->take(5)->map(fn($c) => [
+            'name'  => $c->name,
+            'count' => $c->reports_count,
+        ]);
+        $otherCategories = $categoryStats->slice(5)->map(fn($c) => [
+            'name'  => $c->name,
+            'count' => $c->reports_count,
+        ]);
 
         // also provide the older `perKategori` shape for views that still expect it
         $perKategori = $categoryStats->map(fn($c) => [
