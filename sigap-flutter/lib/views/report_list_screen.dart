@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/report_controller.dart';
-import '../models/report_model.dart';
+import '../utils/app_colors.dart';
+import '../widgets/report_card.dart';
 import 'report_detail_screen.dart';
 import 'report_form_screen.dart';
 
@@ -18,34 +19,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
     Future.microtask(() => context.read<ReportController>().fetchReports());
   }
 
-  Color _statusColor(String status) {
-    switch (status) {
-      case 'diterima':
-        return Colors.blue;
-      case 'ditinjau':
-        return Colors.indigo;
-      case 'in_progress':
-        return Colors.orange;
-      case 'selesai':
-        return Colors.green;
-      case 'ditolak':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  Color _urgencyColor(String urgency) {
-    switch (urgency) {
-      case 'penting':
-        return Colors.orange;
-      case 'darurat':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final ctrl = context.watch<ReportController>();
@@ -53,11 +26,12 @@ class _ReportListScreenState extends State<ReportListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Laporan Saya'),
-        backgroundColor: Colors.deepOrange,
-        foregroundColor: Colors.white,
+        // Warna, elevasi, dan gaya teks sudah diatur oleh AppTheme.light
+        // lewat AppBarTheme — tidak perlu di-override lagi di sini.
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepOrange,
+        // Warna oranye untuk FAB sudah diatur lewat
+        // FloatingActionButtonThemeData di AppTheme.
         onPressed: () async {
           await Navigator.push(
             context,
@@ -67,129 +41,71 @@ class _ReportListScreenState extends State<ReportListScreen> {
             context.read<ReportController>().fetchReports();
           }
         },
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add_location_alt_rounded),
       ),
       body: ctrl.isLoading
           ? const Center(child: CircularProgressIndicator())
           : ctrl.reports.isEmpty
-          ? const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.inbox_outlined, size: 64, color: Colors.grey),
-                  SizedBox(height: 12),
-                  Text(
-                    'Belum ada laporan',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  Text(
-                    'Tekan + untuk membuat laporan baru',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                ],
-              ),
-            )
-          : RefreshIndicator(
-              onRefresh: () => ctrl.fetchReports(),
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: ctrl.reports.length,
-                itemBuilder: (ctx, i) {
-                  final r = ctrl.reports[i];
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(12),
-                      title: Text(
-                        r.title,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 4),
-                          Text(
-                            r.categoryName,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
+              ? const _EmptyState()
+              : RefreshIndicator(
+                  onRefresh: () => ctrl.fetchReports(),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: ctrl.reports.length,
+                    itemBuilder: (ctx, i) {
+                      final r = ctrl.reports[i];
+                      return ReportCard(
+                        report: r,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ReportDetailScreen(reportId: r.id),
                           ),
-                          const SizedBox(height: 4),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: _urgencyColor(r.urgency).withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              r.urgency.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: _urgencyColor(r.urgency),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            r.locationAddress,
-                            style: const TextStyle(fontSize: 12),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                      trailing: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: _statusColor(r.status).withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: _statusColor(r.status).withOpacity(0.5),
-                              ),
-                            ),
-                            child: Text(
-                              r.status.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: _statusColor(r.status),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            r.createdAt,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ReportDetailScreen(reportId: r.id),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                  ),
+                ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              color: AppColors.primaryBlueLight,
+              shape: BoxShape.circle,
             ),
+            child: const Icon(
+              Icons.location_city_rounded,
+              size: 40,
+              color: AppColors.primaryBlueDark,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Belum ada laporan',
+            style: textTheme.titleMedium?.copyWith(color: AppColors.ink900),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Tekan tombol pin di kanan bawah untuk membuat laporan baru',
+            textAlign: TextAlign.center,
+            style: textTheme.bodySmall,
+          ),
+        ],
+      ),
     );
   }
 }
