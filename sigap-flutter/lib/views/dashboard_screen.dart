@@ -140,7 +140,9 @@ class DashboardScreen extends StatelessWidget {
                             child: ElevatedButton.icon(
                               onPressed: () => Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (_) => const ReportListScreen()),
+                                MaterialPageRoute(
+                                  builder: (_) => const ReportListScreen(),
+                                ),
                               ),
                               icon: const Icon(Icons.list_alt_rounded),
                               label: const Text('Lihat laporan saya'),
@@ -150,7 +152,9 @@ class DashboardScreen extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                               ),
                             ),
                           ),
@@ -181,7 +185,9 @@ class DashboardScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(16),
                             child: Text(
                               'Gagal memuat pengumuman. ${snapshot.error}',
-                              style: const TextStyle(color: AppColors.dangerRed),
+                              style: const TextStyle(
+                                color: AppColors.dangerRed,
+                              ),
                             ),
                           ),
                         );
@@ -199,12 +205,15 @@ class DashboardScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(16),
                             child: Text(
                               'Belum ada pengumuman saat ini.',
-                              style: textTheme.bodyMedium?.copyWith(color: AppColors.slate600),
+                              style: textTheme.bodyMedium?.copyWith(
+                                color: AppColors.slate600,
+                              ),
                             ),
                           ),
                         );
                       }
 
+                      final announcements = snapshot.data!;
                       return Card(
                         elevation: 0,
                         color: AppColors.white,
@@ -217,38 +226,115 @@ class DashboardScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Pengumuman terbaru',
-                                style: textTheme.titleSmall?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.ink900,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              ...snapshot.data!.take(3).map(
-                                (announcement) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        announcement.isPinned ? Icons.push_pin_rounded : Icons.campaign_rounded,
-                                        size: 16,
-                                        color: announcement.isPinned ? AppColors.urgentOrange : AppColors.primaryBlue,
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Pengumuman terbaru',
+                                      style: textTheme.titleSmall?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.ink900,
                                       ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          announcement.title,
-                                          style: textTheme.bodyMedium?.copyWith(color: AppColors.slate600),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                ),
+                                  if (announcements.length > 3)
+                                    Text(
+                                      'Lihat semua',
+                                      style: textTheme.bodySmall?.copyWith(
+                                        color: AppColors.primaryBlue,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                ],
                               ),
+                              const SizedBox(height: 16),
+                              ...announcements.take(3).map((announcement) {
+                                final createdAt = announcement.createdAt;
+                                String formattedDate = 'Tanggal tidak tersedia';
+                                if (createdAt != null && createdAt.isNotEmpty) {
+                                  try {
+                                    final dt = DateTime.parse(createdAt);
+                                    const months = [
+                                      '',
+                                      'Jan',
+                                      'Feb',
+                                      'Mar',
+                                      'Apr',
+                                      'Mei',
+                                      'Jun',
+                                      'Jul',
+                                      'Agu',
+                                      'Sep',
+                                      'Okt',
+                                      'Nov',
+                                      'Des',
+                                    ];
+                                    formattedDate =
+                                        '${dt.day} ${months[dt.month]} ${dt.year}';
+                                  } catch (_) {
+                                    formattedDate = createdAt;
+                                  }
+                                }
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.slate100,
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    padding: const EdgeInsets.all(14),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Icon(
+                                              announcement.isPinned
+                                                  ? Icons.push_pin_rounded
+                                                  : Icons.campaign_rounded,
+                                              size: 18,
+                                              color: announcement.isPinned
+                                                  ? AppColors.urgentOrange
+                                                  : AppColors.primaryBlue,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: Text(
+                                                announcement.title,
+                                                style: textTheme.titleMedium
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: AppColors.ink900,
+                                                    ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          announcement.content,
+                                          style: textTheme.bodyMedium?.copyWith(
+                                            color: AppColors.slate600,
+                                            height: 1.6,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Text(
+                                          'Oleh ${announcement.createdBy ?? 'Admin SIGAP'} • $formattedDate',
+                                          style: textTheme.bodySmall?.copyWith(
+                                            color: AppColors.slate400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                             ],
                           ),
                         ),
