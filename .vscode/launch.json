@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "sigap-flutter",
+            "cwd": "sigap-flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "sigap-flutter (profile mode)",
+            "cwd": "sigap-flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "sigap-flutter (release mode)",
+            "cwd": "sigap-flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

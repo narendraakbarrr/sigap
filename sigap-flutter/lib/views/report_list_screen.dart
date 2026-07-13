@@ -35,6 +35,17 @@ class _ReportListScreenState extends State<ReportListScreen> {
     }
   }
 
+  Color _urgencyColor(String urgency) {
+    switch (urgency) {
+      case 'penting':
+        return Colors.orange;
+      case 'darurat':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ctrl = context.watch<ReportController>();
@@ -104,6 +115,25 @@ class _ReportListScreenState extends State<ReportListScreen> {
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: _urgencyColor(r.urgency).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              r.urgency.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: _urgencyColor(r.urgency),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 4),
