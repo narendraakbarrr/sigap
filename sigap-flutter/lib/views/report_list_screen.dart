@@ -27,11 +27,8 @@ class _ReportListScreenState extends State<ReportListScreen> {
       appBar: AppBar(
         title: const Text('Laporan Saya'),
         // Warna, elevasi, dan gaya teks sudah diatur oleh AppTheme.light
-        // lewat AppBarTheme — tidak perlu di-override lagi di sini.
       ),
       floatingActionButton: FloatingActionButton(
-        // Warna oranye untuk FAB sudah diatur lewat
-        // FloatingActionButtonThemeData di AppTheme.
         onPressed: () async {
           await Navigator.push(
             context,

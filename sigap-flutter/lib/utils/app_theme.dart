@@ -53,9 +53,6 @@ class AppTheme {
       textTheme: textTheme,
       fontFamily: textTheme.bodyMedium?.fontFamily,
 
-      // -----------------------------------------------------------------
-      // AppBar — biru solid, tegas, memberi kesan "instansi resmi"
-      // -----------------------------------------------------------------
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.primaryBlue,
         foregroundColor: AppColors.white,
@@ -66,9 +63,6 @@ class AppTheme {
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
 
-      // -----------------------------------------------------------------
-      // Tombol
-      // -----------------------------------------------------------------
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryBlue,
@@ -100,9 +94,6 @@ class AppTheme {
         ),
       ),
 
-      // -----------------------------------------------------------------
-      // Input (form laporan, login, register)
-      // -----------------------------------------------------------------
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.slate100,
@@ -131,9 +122,6 @@ class AppTheme {
         ),
       ),
 
-      // -----------------------------------------------------------------
-      // Card — dipakai di report_list & dashboard
-      // -----------------------------------------------------------------
       cardTheme: CardThemeData(
         color: AppColors.white,
         elevation: 0,
@@ -145,9 +133,6 @@ class AppTheme {
         ),
       ),
 
-      // -----------------------------------------------------------------
-      // Chip — filter kategori (jalan rusak, lampu mati, saluran air, dst.)
-      // -----------------------------------------------------------------
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.slate100,
         selectedColor: AppColors.primaryBlueLight,
@@ -161,18 +146,12 @@ class AppTheme {
         ),
       ),
 
-      // -----------------------------------------------------------------
-      // FAB — tombol "Lapor" baru, oranye supaya menonjol (urgensi/aksi utama)
-      // -----------------------------------------------------------------
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: AppColors.urgentOrange,
         foregroundColor: AppColors.white,
         elevation: 2,
       ),
 
-      // -----------------------------------------------------------------
-      // Bottom navigation
-      // -----------------------------------------------------------------
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.white,
         selectedItemColor: AppColors.primaryBlue,

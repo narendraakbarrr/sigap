@@ -68,7 +68,6 @@ class ReportController extends Controller
     // GET /api/v1/reports/{id}
     public function show(Report $report)
     {
-        // Warga hanya bisa lihat laporan milik sendiri
         if (Auth::user()->hasRole('user') && $report->user_id !== Auth::id()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }

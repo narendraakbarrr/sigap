@@ -2,16 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
-/// Sistem tipografi SIGAP.
-///
-/// - Display/Heading : Plus Jakarta Sans (tegas, geometris, terasa modern
-///   dan "resmi" tanpa kaku — cocok untuk konteks layanan publik).
-/// - Body/Caption    : Inter (sangat terbaca di ukuran kecil, ideal untuk
-///   daftar laporan & detail data yang padat).
-///
-/// Catatan: tambahkan dependency berikut di pubspec.yaml
-///   dependencies:
-///     google_fonts: ^6.2.1
 class AppTypography {
   AppTypography._();
 

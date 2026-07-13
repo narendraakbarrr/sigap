@@ -4,8 +4,6 @@ import '../utils/app_colors.dart';
 import 'status_badge.dart';
 import 'urgency_badge.dart';
 
-/// Kartu laporan
-/// di dashboard_screen untuk daftar laporan terbaru.
 class ReportCard extends StatelessWidget {
   final ReportModel report;
   final VoidCallback onTap;
@@ -69,7 +67,7 @@ class ReportCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
 
-                    // Lokasi — pakai ikon pin sesuai elemen visual SIGAP
+                    // Lokasi pakai ikon pin sesuai elemen visual SIGAP
                     Row(
                       children: [
                         const Icon(

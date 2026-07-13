@@ -357,7 +357,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     );
   }
 
-  // Helper method di dalam _ReportDetailScreenState:
+  // Helper method di dalam ReportDetailScreenState
   String _statusLabel(String status) {
     const labels = {
       'diterima': 'Diterima',

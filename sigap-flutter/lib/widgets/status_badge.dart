@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 
-/// Status siklus hidup sebuah laporan di SIGAP, sesuai nilai kolom `status`
-/// yang dikirim Laravel: diterima, ditinjau, in_progress, selesai, ditolak.
 enum ReportStatus { received, reviewed, inProgress, resolved, rejected }
 
 extension ReportStatusX on ReportStatus {
@@ -52,12 +50,6 @@ extension ReportStatusX on ReportStatus {
     }
   }
 
-  /// Ikon selaras dengan elemen visual SIGAP:
-  /// - Diterima  -> pin lokasi (laporan baru masuk & tercatat titik lokasinya)
-  /// - Ditinjau  -> kaca pembesar (sedang diverifikasi petugas)
-  /// - Diproses  -> petir (respons cepat sedang berjalan)
-  /// - Selesai   -> perisai + centang (kepercayaan & hasil terverifikasi)
-  /// - Ditolak   -> perisai + silang (transparansi atas keputusan)
   IconData get icon {
     switch (this) {
       case ReportStatus.received:
@@ -74,10 +66,6 @@ extension ReportStatusX on ReportStatus {
   }
 }
 
-/// Badge status laporan — elemen visual signature SIGAP.
-///
-/// Contoh:
-///   StatusBadge(status: ReportStatusX.fromApiValue(report.status))
 class StatusBadge extends StatelessWidget {
   final ReportStatus status;
   final bool compact;

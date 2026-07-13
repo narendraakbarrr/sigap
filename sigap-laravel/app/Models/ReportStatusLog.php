@@ -11,7 +11,7 @@ class ReportStatusLog extends Model
         'changed_by',
         'status',
         'notes',
-        'task_description',  // ← tambahan revisi dosen
+        'task_description',
     ];
 
     public function report()

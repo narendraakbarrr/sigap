@@ -58,7 +58,6 @@ class DashboardController extends Controller
         $topCategories = $categoryStats->take(5);
         $otherCategories = $categoryStats->slice(5);
 
-        // also provide the older `perKategori` shape for views that still expect it
         $perKategori = $categoryStats->map(fn($c) => [
             'name'  => $c->name,
             'count' => $c->reports_count,

@@ -52,9 +52,6 @@ extension ReportUrgencyX on ReportUrgency {
   }
 }
 
-/// Badge urgensi — dipakai berdampingan dengan [StatusBadge].
-/// Untuk urgensi 'normal', badge sengaja dibuat lebih senyap (tanpa isi
-/// warna solid) supaya perhatian pengguna tetap ke laporan yang genting.
 class UrgencyBadge extends StatelessWidget {
   final ReportUrgency urgency;
   final bool compact;
