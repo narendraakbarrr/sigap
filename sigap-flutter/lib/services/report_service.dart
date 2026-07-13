@@ -80,6 +80,7 @@ class ReportService {
     required String description,
     required int categoryId,
     required String locationAddress,
+    required String urgency,
   }) async {
     final headers = await _headers();
     final res = await http.put(
@@ -90,6 +91,7 @@ class ReportService {
         'description': description,
         'category_id': categoryId,
         'location_address': locationAddress,
+        'urgency': urgency,
       }),
     );
     return jsonDecode(res.body);

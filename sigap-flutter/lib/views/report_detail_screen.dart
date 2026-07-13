@@ -51,9 +51,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
         const SnackBar(content: Text('Laporan berhasil dihapus')),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Gagal menghapus laporan')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Gagal menghapus laporan')));
     }
   }
 
@@ -165,6 +165,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   const SizedBox(height: 12),
 
                   _infoRow('Kategori', report.categoryName),
+                  _infoRow('Urgensi', report.urgency.toUpperCase()),
                   _infoRow('Lokasi', report.locationAddress),
                   _infoRow('Tanggal', report.createdAt),
                   const SizedBox(height: 8),

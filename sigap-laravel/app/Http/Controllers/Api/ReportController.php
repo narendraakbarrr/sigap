@@ -40,6 +40,7 @@ class ReportController extends Controller
             'latitude'         => 'nullable|numeric',
             'longitude'        => 'nullable|numeric',
             'photo'            => 'nullable|image|max:2048',
+            'urgency'          => 'nullable|in:normal,penting,darurat',
         ]);
 
         $photoPath = null;
@@ -58,6 +59,7 @@ class ReportController extends Controller
             'latitude'         => $request->latitude,
             'longitude'        => $request->longitude,
             'status'           => 'diterima',
+            'urgency'          => $request->urgency ?? 'normal',
         ]);
 
         return new ReportResource($report->load(['user', 'category']));
@@ -90,10 +92,11 @@ class ReportController extends Controller
             'description'      => 'sometimes|string',
             'category_id'      => 'sometimes|exists:report_categories,id',
             'location_address' => 'sometimes|string|max:500',
+            'urgency'          => 'sometimes|in:normal,penting,darurat',
         ]);
 
         $report->update($request->only([
-            'title', 'description', 'category_id', 'location_address'
+            'title', 'description', 'category_id', 'location_address', 'urgency'
         ]));
 
         return new ReportResource($report->load(['user', 'category']));

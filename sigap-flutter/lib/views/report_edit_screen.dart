@@ -17,14 +17,16 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
   late TextEditingController _descCtrl;
   late TextEditingController _locationCtrl;
   CategoryModel? _selectedCategory;
+  String _selectedUrgency = 'normal';
   bool _isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
-    _titleCtrl    = TextEditingController(text: widget.report.title);
-    _descCtrl     = TextEditingController(text: widget.report.description);
+    _titleCtrl = TextEditingController(text: widget.report.title);
+    _descCtrl = TextEditingController(text: widget.report.description);
     _locationCtrl = TextEditingController(text: widget.report.locationAddress);
+    _selectedUrgency = widget.report.urgency;
 
     // Fetch kategori & set kategori awal
     Future.microtask(() async {
@@ -68,13 +70,14 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
     setState(() => _isSubmitting = true);
 
     try {
-      final ctrl    = context.read<ReportController>();
+      final ctrl = context.read<ReportController>();
       final success = await ctrl.updateReport(
-        id:              widget.report.id,
-        title:           _titleCtrl.text.trim(),
-        description:     _descCtrl.text.trim(),
-        categoryId:      _selectedCategory!.id,
+        id: widget.report.id,
+        title: _titleCtrl.text.trim(),
+        description: _descCtrl.text.trim(),
+        categoryId: _selectedCategory!.id,
         locationAddress: _locationCtrl.text.trim(),
+        urgency: _selectedUrgency,
       );
 
       if (!mounted) return;
@@ -115,7 +118,6 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // Info: hanya bisa edit jika status diterima
             Container(
               width: double.infinity,
@@ -125,18 +127,25 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.blue.shade200),
               ),
-              child: Row(children: [
-                Icon(Icons.info_outline,
-                    color: Colors.blue.shade700, size: 16),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Laporan hanya dapat diedit selama berstatus "Diterima"',
-                    style: TextStyle(
-                        fontSize: 12, color: Colors.blue.shade700),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    color: Colors.blue.shade700,
+                    size: 16,
                   ),
-                ),
-              ]),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Laporan hanya dapat diedit selama berstatus "Diterima"',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.blue.shade700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
 
@@ -159,30 +168,42 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(ctrl.categoryError!,
-                      style: const TextStyle(color: Colors.red)),
+                  Text(
+                    ctrl.categoryError!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                   const SizedBox(height: 8),
                   OutlinedButton(
-                    onPressed: () => context.read<ReportController>().fetchCategories(),
+                    onPressed: () =>
+                        context.read<ReportController>().fetchCategories(),
                     child: const Text('Coba lagi'),
                   ),
                 ],
               )
             else
               DropdownButtonFormField<CategoryModel>(
-                    value: _selectedCategory,
-                    hint: const Text('Pilih kategori'),
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder()),
-                    items: ctrl.categories
-                        .map((c) => DropdownMenuItem(
-                              value: c,
-                              child: Text(c.name),
-                            ))
-                        .toList(),
-                    onChanged: (val) =>
-                        setState(() => _selectedCategory = val),
-                  ),
+                value: _selectedCategory,
+                hint: const Text('Pilih kategori'),
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+                items: ctrl.categories
+                    .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
+                    .toList(),
+                onChanged: (val) => setState(() => _selectedCategory = val),
+              ),
+            const SizedBox(height: 16),
+
+            // Urgensi
+            _label('Urgensi *'),
+            DropdownButtonFormField<String>(
+              value: _selectedUrgency,
+              decoration: const InputDecoration(border: OutlineInputBorder()),
+              items: const [
+                DropdownMenuItem(value: 'normal', child: Text('Normal')),
+                DropdownMenuItem(value: 'penting', child: Text('Penting')),
+                DropdownMenuItem(value: 'darurat', child: Text('Darurat 🚨')),
+              ],
+              onChanged: (val) => setState(() => _selectedUrgency = val!),
+            ),
             const SizedBox(height: 16),
 
             // Deskripsi
@@ -215,13 +236,14 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
               child: ElevatedButton(
                 onPressed: _isSubmitting ? null : _submit,
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepOrange),
+                  backgroundColor: Colors.deepOrange,
+                ),
                 child: _isSubmitting
-                    ? const CircularProgressIndicator(
-                        color: Colors.white)
-                    : const Text('Simpan Perubahan',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 16)),
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                        'Simpan Perubahan',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
               ),
             ),
             const SizedBox(height: 16),
@@ -234,9 +256,10 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
   Widget _label(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
-      child: Text(text,
-          style: const TextStyle(
-              fontWeight: FontWeight.w600, fontSize: 14)),
+      child: Text(
+        text,
+        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+      ),
     );
   }
 }

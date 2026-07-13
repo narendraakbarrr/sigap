@@ -77,6 +77,7 @@ class ReportController extends ChangeNotifier {
     required String description,
     required int categoryId,
     required String locationAddress,
+    required String urgency,
   }) async {
     isLoading = true;
     errorMessage = null;
@@ -88,6 +89,7 @@ class ReportController extends ChangeNotifier {
         description: description,
         categoryId: categoryId,
         locationAddress: locationAddress,
+        urgency: urgency,
       );
 
       final report = data['data'] ?? data;

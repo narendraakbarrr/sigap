@@ -21,6 +21,7 @@ class ReportResource extends JsonResource
             'location'    => $this->location_address,
             'latitude'    => $this->latitude,
             'longitude'   => $this->longitude,
+            'urgency'     => $this->urgency,
             'created_at'  => $this->created_at?->format('d M Y'),
             'user'        => [
                 'id'   => $this->user?->id,
