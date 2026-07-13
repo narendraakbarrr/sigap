@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/report_controller.dart';
-import '../models/report_model.dart';
 import '../models/category_model.dart';
+import '../models/report_model.dart';
+import '../utils/app_colors.dart';
 
 class ReportEditScreen extends StatefulWidget {
   final ReportModel report;
@@ -86,7 +87,7 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Laporan berhasil diperbarui'),
-            backgroundColor: Colors.green,
+            backgroundColor: AppColors.successGreen,
           ),
         );
         Navigator.pop(context, true); // true = ada perubahan
@@ -108,10 +109,12 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
     final ctrl = context.watch<ReportController>();
 
     return Scaffold(
+      backgroundColor: AppColors.slate100,
       appBar: AppBar(
         title: const Text('Edit Laporan'),
-        backgroundColor: Colors.deepOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.primaryBlue,
+        foregroundColor: AppColors.white,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -123,15 +126,17 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.blue.shade50,
+                color: AppColors.primaryBlueLight,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.blue.shade200),
+                border: Border.all(
+                  color: AppColors.primaryBlue.withOpacity(0.3),
+                ),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.info_outline,
-                    color: Colors.blue.shade700,
+                    color: AppColors.primaryBlue,
                     size: 16,
                   ),
                   const SizedBox(width: 8),
@@ -140,7 +145,7 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
                       'Laporan hanya dapat diedit selama berstatus "Diterima"',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.blue.shade700,
+                        color: AppColors.primaryBlueDark,
                       ),
                     ),
                   ),
@@ -153,9 +158,22 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
             _label('Judul Laporan *'),
             TextField(
               controller: _titleCtrl,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Contoh: Jalan berlubang depan masjid',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.slate200),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.slate200),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.primaryBlue),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                fillColor: AppColors.white,
+                filled: true,
               ),
             ),
             const SizedBox(height: 16),
@@ -170,12 +188,15 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
                 children: [
                   Text(
                     ctrl.categoryError!,
-                    style: const TextStyle(color: Colors.red),
+                    style: const TextStyle(color: AppColors.dangerRed),
                   ),
                   const SizedBox(height: 8),
                   OutlinedButton(
                     onPressed: () =>
                         context.read<ReportController>().fetchCategories(),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primaryBlue,
+                    ),
                     child: const Text('Coba lagi'),
                   ),
                 ],
@@ -184,7 +205,22 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
               DropdownButtonFormField<CategoryModel>(
                 value: _selectedCategory,
                 hint: const Text('Pilih kategori'),
-                decoration: const InputDecoration(border: OutlineInputBorder()),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(color: AppColors.slate200),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: AppColors.slate200),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: AppColors.primaryBlue),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  fillColor: AppColors.white,
+                  filled: true,
+                ),
                 items: ctrl.categories
                     .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
                     .toList(),
@@ -196,7 +232,22 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
             _label('Urgensi *'),
             DropdownButtonFormField<String>(
               value: _selectedUrgency,
-              decoration: const InputDecoration(border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.slate200),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.slate200),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.primaryBlue),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                fillColor: AppColors.white,
+                filled: true,
+              ),
               items: const [
                 DropdownMenuItem(value: 'normal', child: Text('Normal')),
                 DropdownMenuItem(value: 'penting', child: Text('Penting')),
@@ -211,9 +262,22 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
             TextField(
               controller: _descCtrl,
               maxLines: 4,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Jelaskan kerusakan/gangguan secara detail...',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.slate200),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.slate200),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.primaryBlue),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                fillColor: AppColors.white,
+                filled: true,
               ),
             ),
             const SizedBox(height: 16),
@@ -222,9 +286,22 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
             _label('Alamat Lokasi *'),
             TextField(
               controller: _locationCtrl,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.location_on_outlined),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.slate200),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.slate200),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.primaryBlue),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                prefixIcon: const Icon(Icons.location_on_outlined),
+                fillColor: AppColors.white,
+                filled: true,
               ),
             ),
             const SizedBox(height: 24),
@@ -236,13 +313,17 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
               child: ElevatedButton(
                 onPressed: _isSubmitting ? null : _submit,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepOrange,
+                  backgroundColor: AppColors.primaryBlue,
+                  foregroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                 ),
                 child: _isSubmitting
                     ? const CircularProgressIndicator(color: Colors.white)
                     : const Text(
                         'Simpan Perubahan',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(fontSize: 16),
                       ),
               ),
             ),
