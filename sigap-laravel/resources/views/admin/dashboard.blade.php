@@ -53,7 +53,10 @@
                     <h3 class="font-semibold text-gray-700 mb-4">
                         Laporan per Kategori
                     </h3>
-                    @php $maxKat = $topCategories->max('count') ?: 1; @endphp
+                    @php
+                        $totalCategoryReports = $topCategories->sum('count') + $otherCategories->sum('count');
+                        $totalCategoryReports = $totalCategoryReports ?: 1;
+                    @endphp
                     <div x-data="{ showAll: false }">
                         @foreach ($topCategories as $kat)
                             <div class="mb-3">
@@ -63,7 +66,7 @@
                                 </div>
                                 <div class="w-full bg-gray-100 rounded-full h-2">
                                     <div class="h-2 rounded-full bg-orange-500"
-                                        style="width: {{ ($kat['count'] / $maxKat) * 100 }}%">
+                                        style="width: {{ ($kat['count'] / $totalCategoryReports) * 100 }}%">
                                     </div>
                                 </div>
                             </div>
@@ -78,8 +81,8 @@
                                             <span class="font-medium">{{ $kat['count'] }}</span>
                                         </div>
                                         <div class="w-full bg-gray-100 rounded-full h-2">
-                                            <div class="h-2 rounded-full bg-orange-500"
-                                                style="width: {{ ($kat['count'] / $maxKat) * 100 }}%">
+                                            <div class="h-2 rounded-full bg-blue-500"
+                                                style="width: {{ ($kat['count'] / $totalCategoryReports) * 100 }}%">
                                             </div>
                                         </div>
                                     </div>
