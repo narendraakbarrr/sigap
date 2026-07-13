@@ -4,6 +4,7 @@ class AnnouncementModel {
   final String content;
   final bool isPinned;
   final String? createdBy;
+  final String? createdAt;
 
   AnnouncementModel({
     required this.id,
@@ -11,6 +12,7 @@ class AnnouncementModel {
     required this.content,
     required this.isPinned,
     this.createdBy,
+    this.createdAt,
   });
 
   factory AnnouncementModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class AnnouncementModel {
       content: json['content'],
       isPinned: json['is_pinned'] ?? false,
       createdBy: json['created_by'],
+      createdAt: json['created_at'],
     );
   }
 }

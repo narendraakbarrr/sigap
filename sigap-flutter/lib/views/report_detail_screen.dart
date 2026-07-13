@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/report_controller.dart';
-import 'report_list_screen.dart';
+import '../utils/app_colors.dart';
 import 'report_edit_screen.dart';
 
 class ReportDetailScreen extends StatefulWidget {
@@ -60,15 +60,15 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   Color _statusColor(String status) {
     switch (status) {
       case 'diterima':
-        return Colors.blue;
+        return AppColors.primaryBlue;
       case 'diproses':
-        return Colors.orange;
+        return AppColors.urgentOrange;
       case 'selesai':
-        return Colors.green;
+        return AppColors.successGreen;
       case 'ditolak':
-        return Colors.red;
+        return AppColors.dangerRed;
       default:
-        return Colors.grey;
+        return AppColors.slate400;
     }
   }
 
@@ -78,10 +78,12 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     final report = ctrl.selectedReport;
 
     return Scaffold(
+      backgroundColor: AppColors.slate100,
       appBar: AppBar(
         title: const Text('Detail Laporan'),
-        backgroundColor: Colors.deepOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.primaryBlue,
+        foregroundColor: AppColors.white,
+        elevation: 0,
         actions: [
           // Tambahkan di actions AppBar, sebelum tombol delete
           if (report != null && report.status == 'diterima')
@@ -126,10 +128,10 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: _statusColor(report.status).withOpacity(0.1),
+                      color: _statusColor(report.status).withOpacity(0.12),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: _statusColor(report.status).withOpacity(0.5),
+                        color: _statusColor(report.status).withOpacity(0.6),
                       ),
                     ),
                     child: Text(
@@ -144,9 +146,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
 
                   Text(
                     report.title,
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: AppColors.ink900,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -168,11 +170,13 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   _infoRow('Urgensi', report.urgency.toUpperCase()),
                   _infoRow('Lokasi', report.locationAddress),
                   _infoRow('Tanggal', report.createdAt),
-                  const SizedBox(height: 8),
-
-                  const Text(
+                  const SizedBox(height: 14),
+                  Text(
                     'Deskripsi',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ink900,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -183,11 +187,11 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   // Track Record
                   if (report.statusLogs.isNotEmpty) ...[
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       'Track Record',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.ink900,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -207,7 +211,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                                 width: 28,
                                 height: 28,
                                 decoration: BoxDecoration(
-                                  color: Colors.deepOrange,
+                                  color: AppColors.primaryBlue,
                                   shape: BoxShape.circle,
                                 ),
                                 child: Center(
@@ -225,7 +229,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                                 Container(
                                   width: 2,
                                   height: 40,
-                                  color: Colors.grey.shade300,
+                                  color: AppColors.slate200,
                                 ),
                             ],
                           ),
@@ -237,9 +241,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                               margin: const EdgeInsets.only(bottom: 8),
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors.grey.shade50,
+                                color: AppColors.slate100,
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.shade200),
+                                border: Border.all(color: AppColors.slate200),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,31 +262,37 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                                       if (log.changedAt != null)
                                         Text(
                                           log.changedAt!,
-                                          style: const TextStyle(
-                                            fontSize: 10,
-                                            color: Colors.grey,
-                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                fontSize: 10,
+                                                color: AppColors.slate400,
+                                              ),
                                         ),
                                     ],
                                   ),
                                   if (log.changedBy != null)
                                     Text(
                                       'Oleh: ${log.changedBy}',
-                                      style: const TextStyle(
-                                        fontSize: 11,
-                                        color: Colors.grey,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            fontSize: 11,
+                                            color: AppColors.slate400,
+                                          ),
                                     ),
                                   if (log.taskDescription != null) ...[
                                     const SizedBox(height: 6),
                                     Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue.shade50,
+                                        color: AppColors.primaryBlueLight,
                                         borderRadius: BorderRadius.circular(6),
                                         border: Border(
                                           left: BorderSide(
-                                            color: Colors.blue.shade400,
+                                            color: AppColors.primaryBlue,
                                             width: 3,
                                           ),
                                         ),
@@ -291,7 +301,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                                         'Tindakan: ${log.taskDescription}',
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: Colors.blue.shade800,
+                                          color: AppColors.primaryBlueDark,
                                         ),
                                       ),
                                     ),
@@ -300,10 +310,13 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                                     const SizedBox(height: 4),
                                     Text(
                                       'Catatan: ${log.notes}',
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black87,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            fontSize: 12,
+                                            color: AppColors.slate600,
+                                          ),
                                     ),
                                   ],
                                 ],
