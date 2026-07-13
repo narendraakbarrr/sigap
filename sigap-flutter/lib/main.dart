@@ -4,6 +4,7 @@ import 'controllers/auth_controller.dart';
 import 'views/login_screen.dart';
 import 'views/dashboard_screen.dart';
 import 'controllers/report_controller.dart';
+import 'utils/app_theme.dart';
 
 void main() {
   runApp(
@@ -25,10 +26,7 @@ class SigapApp extends StatelessWidget {
     return MaterialApp(
       title: 'SIGAP',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.light,
       home: const SplashScreen(),
     );
   }

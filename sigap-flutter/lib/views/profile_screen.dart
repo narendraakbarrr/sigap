@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/auth_controller.dart';
 import '../services/api_service.dart';
+import '../utils/app_colors.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,6 +12,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final _nameCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
   bool _isEditing = false;
   bool _isSaving = false;
 
@@ -19,11 +21,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     final user = context.read<AuthController>().currentUser;
     _nameCtrl.text = user?.name ?? '';
+    _emailCtrl.text = user?.email ?? '-';
   }
 
   @override
   void dispose() {
     _nameCtrl.dispose();
+    _emailCtrl.dispose();
     super.dispose();
   }
 
@@ -41,15 +45,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Profil berhasil diperbarui'),
-            backgroundColor: Colors.green,
+            backgroundColor: AppColors.successGreen,
           ),
         );
         setState(() => _isEditing = false);
       }
     } catch (_) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Gagal memperbarui profil')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gagal memperbarui profil')),
+      );
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }
@@ -58,15 +62,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AuthController>().currentUser;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      backgroundColor: AppColors.slate100,
       appBar: AppBar(
         title: const Text('Profil Saya'),
-        backgroundColor: Colors.deepOrange,
-        foregroundColor: Colors.white,
+        centerTitle: true,
+        backgroundColor: AppColors.primaryBlue,
+        foregroundColor: AppColors.white,
+        elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(_isEditing ? Icons.close : Icons.edit),
+            icon: Icon(_isEditing ? Icons.close_rounded : Icons.edit_rounded),
             onPressed: () => setState(() {
               _isEditing = !_isEditing;
               if (!_isEditing) _nameCtrl.text = user?.name ?? '';
@@ -74,104 +82,110 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            // Avatar
-            CircleAvatar(
-              radius: 48,
-              backgroundColor: Colors.deepOrange.shade100,
-              child: Text(
-                user?.name.isNotEmpty == true
-                    ? user!.name[0].toUpperCase()
-                    : '?',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepOrange.shade700,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Role badge
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              decoration: BoxDecoration(
-                color: Colors.deepOrange.shade50,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.deepOrange.shade200),
-              ),
-              child: Text(
-                user?.role.toUpperCase() ?? '-',
-                style: TextStyle(
-                  color: Colors.deepOrange.shade700,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            // Form profil
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    // Nama
-                    TextField(
-                      controller: _nameCtrl,
-                      enabled: _isEditing,
-                      decoration: InputDecoration(
-                        labelText: 'Nama Lengkap',
-                        border: const OutlineInputBorder(),
-                        filled: !_isEditing,
-                        fillColor: _isEditing ? null : Colors.grey.shade100,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 520),
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 46,
+                    backgroundColor: AppColors.primaryBlueLight,
+                    child: Text(
+                      user?.name.isNotEmpty == true ? user!.name[0].toUpperCase() : '?',
+                      style: textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primaryBlueDark,
                       ),
                     ),
-                    const SizedBox(height: 16),
-
-                    // Email (read only)
-                    TextField(
-                      controller: TextEditingController(
-                        text: user?.email ?? '-',
-                      ),
-                      enabled: false,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        border: const OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        suffixIcon: const Icon(Icons.lock_outline, size: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Tombol simpan (hanya muncul saat editing)
-            if (_isEditing)
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: _isSaving ? null : _saveProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepOrange,
                   ),
-                  child: _isSaving
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
-                          'Simpan Perubahan',
-                          style: TextStyle(color: Colors.white),
+                  const SizedBox(height: 14),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryBlueLight,
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      (user?.role ?? '-').toUpperCase(),
+                      style: textTheme.labelMedium?.copyWith(
+                        color: AppColors.primaryBlueDark,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Card(
+                    elevation: 0,
+                    color: AppColors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: const BorderSide(color: AppColors.slate200),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: _nameCtrl,
+                            enabled: _isEditing,
+                            decoration: InputDecoration(
+                              labelText: 'Nama Lengkap',
+                              prefixIcon: const Icon(Icons.person_outline),
+                              filled: !_isEditing,
+                              fillColor: _isEditing ? null : AppColors.slate100,
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          TextField(
+                            controller: _emailCtrl,
+                            enabled: false,
+                            decoration: const InputDecoration(
+                              labelText: 'Email',
+                              prefixIcon: Icon(Icons.email_outlined),
+                              filled: true,
+                              fillColor: AppColors.slate100,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  if (_isEditing)
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: _isSaving ? null : _saveProfile,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryBlue,
+                          foregroundColor: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
                         ),
-                ),
+                        child: _isSaving
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.2,
+                                  color: AppColors.white,
+                                ),
+                              )
+                            : const Text(
+                                'Simpan Perubahan',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                      ),
+                    ),
+                ],
               ),
-          ],
+            ),
+          ),
         ),
       ),
     );
