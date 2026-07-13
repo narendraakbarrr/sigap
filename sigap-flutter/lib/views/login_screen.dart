@@ -68,23 +68,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(24),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryBlueLight,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: const Icon(
-                          Icons.location_city_rounded,
-                          color: AppColors.primaryBlueDark,
-                          size: 36,
-                        ),
+                      Image.asset(
+                        'lib/picture/Logo SIGAP.png',
+                        width: 72,
+                        height: 72,
+                        fit: BoxFit.contain,
                       ),
                       const SizedBox(height: 16),
                       Text(
                         'Masuk ke SIGAP',
+                        textAlign: TextAlign.center,
                         style: textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColors.ink900,
@@ -93,6 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 8),
                       Text(
                         'Sistem pelaporan infrastruktur publik yang cepat, aman, dan transparan.',
+                        textAlign: TextAlign.center,
                         style: textTheme.bodyMedium?.copyWith(
                           color: AppColors.slate600,
                           height: 1.45,
@@ -116,9 +112,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           prefixIcon: const Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscure ? Icons.visibility_off : Icons.visibility,
+                              _obscure
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                             ),
-                            onPressed: () => setState(() => _obscure = !_obscure),
+                            onPressed: () =>
+                                setState(() => _obscure = !_obscure),
                           ),
                         ),
                       ),
@@ -161,7 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         onPressed: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => const RegisterScreen(),
+                          ),
                         ),
                         child: const Text('Belum punya akun? Daftar di sini'),
                       ),

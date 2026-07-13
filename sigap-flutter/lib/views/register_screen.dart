@@ -13,8 +13,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _nameCtrl     = TextEditingController();
-  final _emailCtrl    = TextEditingController();
+  final _nameCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   bool _isLoading = false;
 
@@ -22,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _handleRegister() async {
     setState(() => _isLoading = true);
     try {
-      final api  = ApiService();
+      final api = ApiService();
       final data = await api.register(
         _nameCtrl.text.trim(),
         _emailCtrl.text.trim(),
@@ -34,16 +34,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         final auth = context.read<AuthController>();
         auth.currentUser = UserModel.fromJson(data['user']);
         auth.notifyListeners();
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => const DashboardScreen()),
-            (r) => false);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const DashboardScreen()),
+          (r) => false,
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(data['message'] ?? 'Registrasi gagal')));
+          SnackBar(content: Text(data['message'] ?? 'Registrasi gagal')),
+        );
       }
     } catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Tidak dapat terhubung ke server')));
+        const SnackBar(content: Text('Tidak dapat terhubung ke server')),
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -78,23 +82,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(24),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryBlueLight,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: const Icon(
-                          Icons.person_add_alt_rounded,
-                          color: AppColors.primaryBlueDark,
-                          size: 34,
-                        ),
+                      Image.asset(
+                        'lib/picture/Logo SIGAP.png',
+                        width: 72,
+                        height: 72,
+                        fit: BoxFit.contain,
                       ),
                       const SizedBox(height: 16),
                       Text(
                         'Buat akun SIGAP',
+                        textAlign: TextAlign.center,
                         style: textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColors.ink900,
@@ -103,6 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 8),
                       Text(
                         'Daftarkan diri Anda untuk mulai melaporkan masalah publik secara cepat.',
+                        textAlign: TextAlign.center,
                         style: textTheme.bodyMedium?.copyWith(
                           color: AppColors.slate600,
                           height: 1.45,
