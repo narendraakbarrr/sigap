@@ -48,12 +48,16 @@ Aplikasi pelaporan kerusakan infrastruktur publik berbasis **client-server**, te
 ---
 
 ## 📁 Struktur Project
+
+```text
 sigap/
-├── sigap-laravel/     ← Backend & Web Admin (Laravel 13)
-├── sigap-flutter/     ← Mobile App (Flutter)
-├── Laporan/           ← Dokumen laporan ilmiah
-├── ERD.md             ← Entity Relationship Diagram
+├── sigap-laravel/      # Backend & Web Admin (Laravel 13)
+├── sigap-flutter/      # Mobile App (Flutter)
+├── Laporan/            # Dokumen laporan ilmiah
+├── ERD.md              # Entity Relationship Diagram
 └── README.md
+```
+
 ---
 
 ## ⚙️ Instalasi & Menjalankan Project
@@ -245,12 +249,12 @@ photo            : [file gambar, opsional]
 
 ## 👨‍💻 Tim Pengembang
 
-| Nama | NIM |
-| Muhammad Narendra Gema Akbar Raihan | 230102091 |
-| Zakqi Ramadhan | 230102129 |
-| M. SAKTI GABITA | 230102131 |
-| Andreansyah Rahmattullah | 240102015 |
-
+| No | Nama | NIM |
+|:--:|------|:---------:|
+| 1 | Muhammad Narendra Gema Akbar Raihan | 230102091 |
+| 2 | Zakqi Ramadhan | 230102129 |
+| 3 | M. Sakti Gabita | 230102131 |
+| 4 | Andreansyah Rahmattullah | 240102015 |
 ---
 
 ## 📄 Laporan
