@@ -4,6 +4,11 @@ import '../utils/app_colors.dart';
 import 'status_badge.dart';
 import 'urgency_badge.dart';
 
+// ======================================================
+// Kartu ringkas untuk masing-masing laporan
+// Digunakan di daftar laporan untuk menampilkan informasi utama dan navigasi detail.
+// Dependency penting: `ReportModel`, `StatusBadge`, `UrgencyBadge`.
+// ======================================================
 class ReportCard extends StatelessWidget {
   final ReportModel report;
   final VoidCallback onTap;

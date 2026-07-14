@@ -66,6 +66,12 @@ extension ReportStatusX on ReportStatus {
   }
 }
 
+// ======================================================
+// Widget badge status laporan
+// Menampilkan label, ikon, dan warna yang sesuai dengan status laporan.
+// Digunakan di tampilan daftar dan detail laporan.
+// Dependency penting: `ReportStatusX`, `AppColors`.
+// ======================================================
 class StatusBadge extends StatelessWidget {
   final ReportStatus status;
   final bool compact;

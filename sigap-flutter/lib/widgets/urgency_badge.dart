@@ -3,6 +3,12 @@ import '../utils/app_colors.dart';
 
 /// Level urgensi laporan sesuai kolom `urgency` dari Laravel:
 /// normal, penting, darurat.
+// ======================================================
+// Badge urgensi laporan
+// Menentukan tampilan tingkat urgensi untuk laporan.
+// Digunakan di kartu laporan dan formulir laporan.
+// Dependency penting: `AppColors`.
+// ======================================================
 enum ReportUrgency { normal, penting, darurat }
 
 extension ReportUrgencyX on ReportUrgency {

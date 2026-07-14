@@ -1,3 +1,8 @@
+// ======================================================
+// Model kategori laporan
+// Menyimpan informasi kategori yang tersedia di form pelaporan.
+// Digunakan oleh `ReportFormScreen`, `ReportEditScreen`, dan `ReportController`.
+// ======================================================
 class CategoryModel {
   final int id;
   final String name;

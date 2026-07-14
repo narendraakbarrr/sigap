@@ -4,9 +4,16 @@ import 'package:http/http.dart' as http;
 import '../config.dart';
 import 'api_service.dart';
 
+// ======================================================
+// Layanan API untuk operasi laporan
+// Mengelola pemanggilan endpoint laporan, kategori, dan operasi file foto.
+// Digunakan oleh `ReportController` untuk CRUD laporan.
+// Dependency penting: `ApiService`, `AppConfig`, package `http`.
+// ======================================================
 class ReportService {
   final _api = ApiService();
 
+  /// Menyusun header autentikasi untuk request laporan.
   Future<Map<String, String>> _headers() async {
     final token = await _api.getToken();
     return {
@@ -17,6 +24,9 @@ class ReportService {
   }
 
   // Ambil semua laporan
+  /// Mengambil semua laporan pengguna dari API.
+  ///
+  /// Mengembalikan list data mentah yang akan diparsing oleh controller.
   Future<List<dynamic>> getReports() async {
     final headers = await _headers();
     final res = await http.get(
@@ -28,6 +38,9 @@ class ReportService {
   }
 
   // Detail satu laporan
+  /// Mengambil detail laporan tertentu berdasarkan `id`.
+  ///
+  /// Mengembalikan respons JSON lengkap dari endpoint laporan.
   Future<Map<String, dynamic>> getReport(int id) async {
     final headers = await _headers();
     final res = await http.get(
@@ -38,6 +51,11 @@ class ReportService {
   }
 
   // Buat laporan baru (dengan foto opsional)
+  /// Membuat laporan baru dengan opsi unggahan foto.
+  ///
+  /// Parameter mencakup judul, deskripsi, kategori, lokasi, urgensi,
+  /// dan koordinat opsional.
+  /// Efek samping: mengirim request multipart ke endpoint laporan.
   Future<Map<String, dynamic>> createReport({
     required String title,
     required String description,
@@ -74,6 +92,9 @@ class ReportService {
     return jsonDecode(res.body);
   }
 
+  /// Memperbarui data laporan yang sudah ada.
+  ///
+  /// Mengirim request PUT ke endpoint laporan dengan data terformat JSON.
   Future<Map<String, dynamic>> updateReport({
     required int id,
     required String title,
@@ -98,6 +119,9 @@ class ReportService {
   }
 
   // Hapus laporan
+  /// Menghapus laporan berdasarkan `id` melalui API.
+  ///
+  /// Mengembalikan respons JSON dari operasi hapus.
   Future<Map<String, dynamic>> deleteReport(int id) async {
     final headers = await _headers();
     final res = await http.delete(
@@ -107,6 +131,9 @@ class ReportService {
     return jsonDecode(res.body);
   }
 
+  /// Mengambil daftar kategori laporan untuk opsi form.
+  ///
+  /// Mendukung respons API dalam bentuk list langsung atau objek dengan key `data`.
   Future<List<dynamic>> getCategories() async {
     final headers = await _headers();
     final url = Uri.parse('${AppConfig.baseUrl}/categories');

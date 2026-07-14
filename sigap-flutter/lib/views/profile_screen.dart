@@ -4,6 +4,11 @@ import '../controllers/auth_controller.dart';
 import '../services/api_service.dart';
 import '../utils/app_colors.dart';
 
+// ======================================================
+// Halaman profil pengguna
+// Menampilkan informasi akun dan mendukung pembaruan nama pengguna.
+// Dependency penting: `AuthController`, `ApiService`.
+// ======================================================
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
   @override
@@ -31,6 +36,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
+  /// Menyimpan nama profil yang diperbarui ke backend.
+  ///
+  /// Jika berhasil, `AuthController` diperbarui dan UI menampilkan notifikasi.
   Future<void> _saveProfile() async {
     setState(() => _isSaving = true);
     try {

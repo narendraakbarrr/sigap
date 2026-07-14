@@ -6,6 +6,11 @@ import '../services/api_service.dart';
 import '../utils/app_colors.dart';
 import 'dashboard_screen.dart';
 
+// ======================================================
+// Tampilan registrasi pengguna baru
+// Menyajikan form pembuatan akun dan menyimpan token bila registrasi berhasil.
+// Dependency penting: `ApiService`, `AuthController`, `DashboardScreen`.
+// ======================================================
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
   @override
@@ -18,7 +23,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordCtrl = TextEditingController();
   bool _isLoading = false;
 
-  // Menangani proses registrasi pengguna baru
+  /// Mengirim permintaan registrasi ke API.
+  ///
+  /// Bila berhasil, token disimpan dan app diarahkan ke dashboard.
+  /// Bila gagal, menampilkan pesan error ke pengguna.
   Future<void> _handleRegister() async {
     setState(() => _isLoading = true);
     try {

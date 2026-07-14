@@ -5,6 +5,12 @@ import '../models/category_model.dart';
 import '../models/report_model.dart';
 import '../utils/app_colors.dart';
 
+// ======================================================
+// Halaman edit laporan
+// Menyajikan form untuk memperbarui data laporan yang sudah ada.
+// Hanya tersedia bila laporan memiliki status yang dapat diedit.
+// Dependency penting: `ReportController`, `CategoryModel`.
+// ======================================================
 class ReportEditScreen extends StatefulWidget {
   final ReportModel report;
   const ReportEditScreen({super.key, required this.report});
@@ -54,6 +60,10 @@ class _ReportEditScreenState extends State<ReportEditScreen> {
     super.dispose();
   }
 
+  /// Mengirimkan perubahan laporan ke backend.
+  ///
+  /// Mengecek validitas field terlebih dahulu, kemudian memanggil
+  /// `ReportController.updateReport` dan menutup layar bila berhasil.
   Future<void> _submit() async {
     if (_titleCtrl.text.isEmpty ||
         _descCtrl.text.isEmpty ||

@@ -5,6 +5,12 @@ import '../utils/app_colors.dart';
 import 'dashboard_screen.dart';
 import 'register_screen.dart';
 
+// ======================================================
+// Tampilan login pengguna SIGAP
+// Menyajikan form autentikasi email dan password,
+// lalu mengarahkan pengguna ke dashboard saat login berhasil.
+// Dependency penting: `AuthController`, `DashboardScreen`, `RegisterScreen`.
+// ======================================================
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
   @override
@@ -23,6 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  /// Mengirim data login ke `AuthController`.
+  ///
+  /// Menampilkan pesan kesalahan bila login gagal, dan menavigasi ke
+  /// `DashboardScreen` bila berhasil.
   Future<void> _handleLogin() async {
     final auth = context.read<AuthController>();
     final success = await auth.login(

@@ -6,6 +6,11 @@ import 'views/dashboard_screen.dart';
 import 'controllers/report_controller.dart';
 import 'utils/app_theme.dart';
 
+// ======================================================
+// Entry point aplikasi Flutter SIGAP
+// Menginisialisasi provider global untuk autentikasi dan laporan,
+// lalu menjalankan widget root `SigapApp`.
+// ======================================================
 void main() {
   runApp(
     MultiProvider(
@@ -18,6 +23,12 @@ void main() {
   );
 }
 
+// ======================================================
+// Aplikasi Root SIGAP
+// Menyediakan tema global dan halaman splash awal.
+// Digunakan sebagai widget utama pada `runApp`.
+// Dependency penting: `AppTheme`, `SplashScreen`.
+// ======================================================
 class SigapApp extends StatelessWidget {
   const SigapApp({super.key});
 
@@ -38,6 +49,11 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
+// ======================================================
+// Splash screen awal
+// Memeriksa sesi pengguna yang tersimpan dan mengarahkan ke
+// halaman dashboard atau login sesuai status autentikasi.
+// ======================================================
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
@@ -45,6 +61,10 @@ class _SplashScreenState extends State<SplashScreen> {
     _checkSession();
   }
 
+  /// Memverifikasi session yang tersimpan melalui `AuthController`.
+  ///
+  /// Jika token valid, navigasi beralih ke `DashboardScreen`.
+  /// Jika tidak, pengguna diarahkan ke `LoginScreen`.
   Future<void> _checkSession() async {
     final auth    = context.read<AuthController>();
     final isLogin = await auth.checkSession();

@@ -6,6 +6,12 @@ import '../widgets/report_card.dart';
 import 'report_detail_screen.dart';
 import 'report_form_screen.dart';
 
+// ======================================================
+// Halaman daftar laporan pengguna
+// Menampilkan daftar laporan yang diambil dari backend dan
+// menyediakan akses pembuatan laporan baru serta refresh data.
+// Dependency penting: `ReportController`, `ReportCard`, `ReportDetailScreen`.
+// ======================================================
 class ReportListScreen extends StatefulWidget {
   const ReportListScreen({super.key});
   @override
@@ -70,6 +76,9 @@ class _ReportListScreenState extends State<ReportListScreen> {
 class _EmptyState extends StatelessWidget {
   const _EmptyState();
 
+  /// Tampilan keadaan kosong saat belum ada laporan.
+  ///
+  /// Memberikan instruksi kepada pengguna untuk membuat laporan baru.
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;

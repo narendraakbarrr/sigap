@@ -4,7 +4,16 @@ import '../config.dart';
 import '../models/announcement_model.dart';
 import 'api_service.dart';
 
+// ======================================================
+// Layanan API pengumuman SIGAP
+// Mengambil daftar pengumuman dari backend untuk ditampilkan di dashboard.
+// Dependency penting: `ApiService`, `AppConfig`, model `AnnouncementModel`.
+// ======================================================
 class AnnouncementService {
+  /// Mengambil daftar pengumuman terbaru.
+  ///
+  /// Mengembalikan list model `AnnouncementModel`.
+  /// Melempar exception jika request gagal.
   Future<List<AnnouncementModel>> fetchAnnouncements() async {
     final api = ApiService();
     final headers = await api.authHeaders();

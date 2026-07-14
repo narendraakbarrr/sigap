@@ -1,3 +1,8 @@
+// ======================================================
+// Model pengguna SIGAP
+// Menyimpan informasi dasar pengguna yang digunakan dalam sesi login.
+// Digunakan oleh `AuthController` dan halaman profil.
+// ======================================================
 class UserModel {
   final int id;
   final String name;

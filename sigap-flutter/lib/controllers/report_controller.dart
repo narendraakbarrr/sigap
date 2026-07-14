@@ -4,6 +4,12 @@ import '../models/category_model.dart';
 import '../services/report_service.dart';
 import 'dart:io';
 
+// ======================================================
+// Kontrol data laporan
+// Mengelola pengambilan, pembuatan, pembaruan, dan penghapusan laporan.
+// Digunakan oleh tampilan daftar, detail, form, dan filter kategori.
+// Dependency penting: `ReportService`, `ReportModel`, `CategoryModel`.
+// ======================================================
 class ReportController extends ChangeNotifier {
   final _service = ReportService();
 
@@ -13,6 +19,10 @@ class ReportController extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
 
+  /// Mengambil daftar laporan dari API.
+  ///
+  /// Mengatur state loading sebelum dan sesudah panggilan API,
+  /// serta mengisi daftar `reports` dengan model yang diparsing.
   Future<void> fetchReports() async {
     isLoading = true;
     notifyListeners();
@@ -26,6 +36,9 @@ class ReportController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Mengambil detail satu laporan berdasarkan `id`.
+  ///
+  /// Memuat data ke `selectedReport` untuk digunakan oleh layar detail.
   Future<void> fetchReportDetail(int id) async {
     isLoading = true;
     selectedReport = null;
@@ -40,6 +53,11 @@ class ReportController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Membuat laporan baru melalui API.
+  ///
+  /// Parameter mencakup judul, deskripsi, kategori, lokasi, urgensi, dan foto opsional.
+  /// Mengembalikan `true` jika respons API menunjukkan laporan berhasil dibuat.
+  /// Efek samping: memperbarui state loading dan error untuk UI.
   Future<bool> createReport({
     required String title,
     required String description,
@@ -71,6 +89,11 @@ class ReportController extends ChangeNotifier {
     }
   }
 
+  /// Memperbarui laporan berdasarkan `id`.
+  ///
+  /// Parameter mencakup data laporan yang diubah. Jika update berhasil,
+  /// daftar `reports` dan `selectedReport` diperbarui bila perlu.
+  /// Mengembalikan `true` apabila API mengonfirmasi perubahan.
   Future<bool> updateReport({
     required int id,
     required String title,
@@ -119,6 +142,9 @@ class ReportController extends ChangeNotifier {
     }
   }
 
+  /// Menghapus laporan berdasarkan `id`.
+  ///
+  /// Efek samping: memanggil API delete dan menghapus item dari daftar lokal.
   Future<bool> deleteReport(int id) async {
     isLoading = true;
     notifyListeners();
@@ -139,6 +165,9 @@ class ReportController extends ChangeNotifier {
   bool isLoadingCategories = false;
   String? categoryError;
 
+  /// Mengambil daftar kategori laporan dari API.
+  ///
+  /// Memperbarui state khusus kategori dan menyimpan pesan error jika gagal.
   Future<void> fetchCategories() async {
     isLoadingCategories = true;
     categoryError = null;

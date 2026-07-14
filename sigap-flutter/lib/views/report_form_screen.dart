@@ -6,6 +6,11 @@ import '../controllers/report_controller.dart';
 import '../models/category_model.dart';
 import '../utils/app_colors.dart';
 
+// ======================================================
+// Halaman formulir pembuatan laporan
+// Memungkinkan pengguna membuat laporan baru dengan kategori, urgensi, lokasi, dan opsi foto.
+// Dependency penting: `ReportController`, `ImagePicker`, `CategoryModel`.
+// ======================================================
 class ReportFormScreen extends StatefulWidget {
   const ReportFormScreen({super.key});
   @override
@@ -35,6 +40,7 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
     super.dispose();
   }
 
+  /// Mengambil foto baru menggunakan kamera perangkat.
   Future<void> _pickPhoto() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(
@@ -46,6 +52,7 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
     }
   }
 
+  /// Mengambil foto dari galeri perangkat.
   Future<void> _pickFromGallery() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(
@@ -57,6 +64,10 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
     }
   }
 
+  /// Menangani validasi input dan pengiriman laporan baru.
+  ///
+  /// Memastikan semua field wajib terisi, lalu memanggil
+  /// `ReportController.createReport` dan menampilkan notifikasi hasil.
   Future<void> _submit() async {
     if (_titleCtrl.text.isEmpty ||
         _descCtrl.text.isEmpty ||

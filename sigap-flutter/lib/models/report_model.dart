@@ -22,6 +22,12 @@ class StatusLog {
   );
 }
 
+// ======================================================
+// Model laporan SIGAP
+// Mewakili entitas laporan di seluruh aplikasi.
+// Digunakan oleh controller, daftar laporan, detail, dan form.
+// Dependency penting: `StatusLog` untuk riwayat status.
+// ======================================================
 class ReportModel {
   final int id;
   final String title;

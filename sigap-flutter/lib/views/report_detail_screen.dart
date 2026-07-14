@@ -4,6 +4,12 @@ import '../controllers/report_controller.dart';
 import '../utils/app_colors.dart';
 import 'report_edit_screen.dart';
 
+// ======================================================
+// Halaman detail laporan
+// Menampilkan status, informasi lengkap, dan histori perubahan laporan.
+// Mendukung aksi edit dan hapus untuk laporan dengan status `diterima`.
+// Dependency penting: `ReportController`, `ReportEditScreen`.
+// ======================================================
 class ReportDetailScreen extends StatefulWidget {
   final int reportId;
   const ReportDetailScreen({super.key, required this.reportId});

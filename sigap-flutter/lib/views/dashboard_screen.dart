@@ -8,6 +8,11 @@ import 'login_screen.dart';
 import 'profile_screen.dart';
 import 'report_list_screen.dart';
 
+// ======================================================
+// Halaman dashboard utama SIGAP
+// Menampilkan ringkasan profil pengguna, menu laporan, dan pengumuman terbaru.
+// Dependency penting: `AuthController`, `AnnouncementService`, `ReportListScreen`.
+// ======================================================
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 

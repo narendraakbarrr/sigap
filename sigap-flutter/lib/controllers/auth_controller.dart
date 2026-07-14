@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import '../services/api_service.dart';
 
+// ======================================================
+// Kontrol autentikasi pengguna
+// Mengelola login, logout, dan pengecekan sesi.
+// Digunakan oleh halaman login, dashboard, dan navigasi awal.
+// Dependency penting: `ApiService`, `UserModel`.
+// ======================================================
 class AuthController extends ChangeNotifier {
   final _api = ApiService();
 
@@ -9,6 +15,16 @@ class AuthController extends ChangeNotifier {
   bool isLoading    = false;
   String? errorMessage;
 
+  /// Mengirimkan request login ke API.
+  ///
+  /// Parameter:
+  /// - `email`: alamat email pengguna.
+  /// - `password`: kata sandi pengguna.
+  ///
+  /// Mengembalikan `true` jika login berhasil dan token disimpan,
+  /// `false` jika gagal.
+  /// Efek samping: menyimpan token ke SharedPreferences,
+  /// memperbarui state loading, dan memicu notifikasi UI.
   Future<bool> login(String email, String password) async {
     isLoading = true; errorMessage = null; notifyListeners();
     try {
