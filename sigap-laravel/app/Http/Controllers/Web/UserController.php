@@ -9,6 +9,12 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    // ======================================================
+    // UserController (Web)
+    // Mengelola tampilan daftar pengguna dan aksi terkait pada panel admin.
+    // Fungsi utama: listing dengan filter role/search, melihat detail pengguna,
+    // mengubah role, dan menghapus pengguna (dengan perlindungan untuk akun sendiri).
+    // ======================================================
     public function index(Request $request)
     {
         $query = User::with('roles');

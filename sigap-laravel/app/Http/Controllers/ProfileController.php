@@ -11,6 +11,15 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    // ======================================================
+    // ProfileController (Web)
+    // Menangani tampilan dan tindakan profil pengguna pada panel web.
+    // - `edit`: menampilkan form edit profil untuk user terautentikasi.
+    // - `update`: memproses pembaruan profil (menggunakan Form Request untuk validasi).
+    // - `destroy`: menghapus akun setelah validasi password saat ini.
+    // Catatan: pada update, jika email berubah maka `email_verified_at` diset ulang.
+    // ======================================================
+
     /**
      * Display the user's profile form.
      */

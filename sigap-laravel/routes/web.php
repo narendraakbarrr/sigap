@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\AnnouncementController;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+| Route web ini dipakai oleh panel admin (blade) dan area ber-auth pada aplikasi.
+| - Semua route diawali middleware `auth` untuk area pengguna terautentikasi.
+| - Grup `admin` dibatasi oleh role `admin` dan berisi CRUD web untuk kategori,
+|   laporan, pengguna, dan pengumuman.
+| - Grup `user` menyediakan halaman yang relevan untuk role `user`.
+*/
+
 Route::get('/', function () {
     return view('welcome');
 });

@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class AnnouncementController extends Controller
 {
+    // ======================================================
+    // AnnouncementController (Web)
+    // Mengelola pengumuman yang ditampilkan pada panel admin dan frontend.
+    // Fungsionalitas: listing, create, edit, update, delete. Field `is_pinned`
+    // digunakan untuk menyorot pengumuman penting.
+    // ======================================================
     public function index(Request $request)
     {
         $announcements = Announcement::with('creator')

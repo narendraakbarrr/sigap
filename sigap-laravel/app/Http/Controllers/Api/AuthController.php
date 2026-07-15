@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // ======================================================
+    // AuthController (API)
+    // Menangani registrasi, login, logout, dan pengambilan data
+    // user saat ini (`me`). Token API dibuat menggunakan Personal Access Token
+    // (Sanctum) dengan label `sigap-mobile` untuk penggunaan mobile.
+    // Keamanan: validasi input ketat pada registrasi dan login.
+    // ======================================================
+
+    /// POST /api/v1/register
+    /// - Mendaftarkan user baru, menugaskan role `user`,
+    ///   dan mengembalikan token autentikasi.
+    /// - Validasi: `name`, `email` unik, `password` (konfirmasi).
     public function register(Request $request)
     {
         $request->validate([
@@ -38,6 +50,9 @@ class AuthController extends Controller
         ], 201);
     }
 
+    /// POST /api/v1/login
+    /// - Mengautentikasi user dan mengembalikan token jika sukses.
+    /// - Validasi: `email`, `password`.
     public function login(Request $request)
     {
         $request->validate([
@@ -64,12 +79,16 @@ class AuthController extends Controller
         ]);
     }
 
+    /// POST /api/v1/logout
+    /// - Menghapus token akses saat ini untuk user yang meminta.
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Logout berhasil']);
     }
 
+    /// GET /api/v1/me
+    /// - Mengembalikan data user yang sedang terautentikasi.
     public function me(Request $request)
     {
         $user = $request->user();

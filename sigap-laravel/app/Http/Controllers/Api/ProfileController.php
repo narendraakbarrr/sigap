@@ -8,7 +8,18 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
+    // ======================================================
+    // ProfileController
+    // Mengelola endpoint profil pengguna (tampilan dan pembaruan).
+    // Tanggung jawab: membaca data pengguna dari request yang diautentikasi
+    // dan memperbarui atribut profil yang sederhana (saat ini hanya nama).
+    // Digunakan oleh: frontend Mobile/SPA untuk menampilkan dan mengedit profil.
+    // Dependency penting: middleware autentikasi (sanctum/passport/session).
+    // ======================================================
     // GET /api/v1/profile
+    /// Mengembalikan data profil pengguna yang sedang terautentikasi.
+    /// - Parameter: `Request $request` (mengandung user yang terautentikasi)
+    /// - Return: JSON berisi `id`, `name`, `email`, dan `role` pertama user.
     public function show(Request $request)
     {
         $user = $request->user();
@@ -21,6 +32,10 @@ class ProfileController extends Controller
     }
 
     // PUT /api/v1/profile
+    /// Memperbarui profil pengguna.
+    /// - Validasi: `name` wajib, string, max 255.
+    /// - Efek samping: memperbarui record pengguna di tabel `users`.
+    /// - Return: JSON profil terkini setelah pembaruan.
     public function update(Request $request)
     {
         $request->validate([

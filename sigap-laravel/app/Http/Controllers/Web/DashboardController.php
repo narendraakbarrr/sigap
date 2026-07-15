@@ -12,6 +12,16 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    // ======================================================
+    // DashboardController (Web)
+    // Menyediakan tampilan dashboard untuk admin dan user biasa.
+    // - `index()` memilih view berdasarkan role user.
+    // - `adminDashboard()` mengumpulkan statistik global, laporan terbaru,
+    //    dan data untuk grafik.
+    // - `userDashboard()` menyiapkan data yang relevan untuk user individu.
+    // Catatan: metode privat mengandung query yang dijalankan server-side
+    // untuk di-render pada Blade templates.
+    // ======================================================
     public function index()
     {
         $user = Auth::user();

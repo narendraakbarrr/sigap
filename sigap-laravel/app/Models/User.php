@@ -10,6 +10,15 @@ use App\Models\Report;
 
 class User extends Authenticatable
 {
+    // ======================================================
+    // Model: User
+    // Representasi pengguna aplikasi. Menggunakan trait:
+    // - `HasApiTokens` untuk token API (Sanctum),
+    // - `HasRoles` (Spatie) untuk manajemen role/permission,
+    // - `Notifiable` untuk notifikasi.
+    // Relasi: `reports()` -> hasMany(Report).
+    // Catatan: atribut sensitif seperti `password` disembunyikan pada serialisasi.
+    // ======================================================
     use HasApiTokens, HasRoles, Notifiable;
 
     public function reports()

@@ -5,6 +5,14 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 
+/*
+|--------------------------------------------------------------------------
+| Bootstrap Application
+|--------------------------------------------------------------------------
+| File ini membangun instance aplikasi dan mengkonfigurasi routing,
+| middleware alias, dan perilaku exception khusus untuk API (mengembalikan JSON
+| bila path diawali `api/`).
+*/
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(

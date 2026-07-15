@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
+    // ======================================================
+    // ReportController (Web)
+    // Menangani tampilan dan aksi terkait laporan pada panel admin
+    // dan daftar laporan untuk user. Fitur meliputi: pencarian,
+    // filter, pagination, pengelolaan status, soft delete, restore,
+    // dan penghapusan permanen.
+    // ======================================================
     // List semua laporan (admin) dengan search & pagination
     public function index(Request $request)
     {
@@ -44,6 +51,7 @@ class ReportController extends Controller
     }
 
     // Daftar laporan milik user (halaman "Laporan Saya")
+    /// Menyediakan listing terbatas pada laporan milik user terautentikasi.
     public function userIndex(Request $request)
     {
         $userId = auth()->id();
@@ -81,6 +89,7 @@ class ReportController extends Controller
     }
 
     // Detail satu laporan
+    /// Menampilkan halaman detail laporan termasuk histori status.
     public function show(Report $report)
     {
         $report->load(['user', 'category', 'statusLogs.changedBy']);
@@ -88,6 +97,7 @@ class ReportController extends Controller
     }
 
     // Form update status
+    /// Memproses pembaruan status laporan oleh admin dan membuat log status.
     public function updateStatus(Request $request, Report $report)
     {
         $request->validate([
@@ -116,6 +126,7 @@ class ReportController extends Controller
     }
 
     // Soft delete laporan
+    /// Melakukan soft-delete untuk laporan (dapat dipulihkan).
     public function destroy(Report $report)
     {
         $report->delete();
@@ -125,6 +136,7 @@ class ReportController extends Controller
     }
 
     // Halaman laporan yang sudah dihapus (trash)
+    /// Menampilkan daftar laporan yang telah di-soft-delete.
     public function trash()
     {
         $reports = Report::onlyTrashed()
@@ -135,6 +147,7 @@ class ReportController extends Controller
     }
 
     // Restore laporan dari trash
+    /// Mengembalikan laporan yang telah dihapus (soft delete restore).
     public function restore($id)
     {
         $report = Report::onlyTrashed()->findOrFail($id);
@@ -145,6 +158,7 @@ class ReportController extends Controller
     }
 
     // Hapus permanen
+    /// Menghapus record laporan secara permanen dari database.
     public function forceDelete($id)
     {
         $report = Report::onlyTrashed()->findOrFail($id);

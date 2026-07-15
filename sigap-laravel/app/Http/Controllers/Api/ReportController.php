@@ -15,7 +15,22 @@ use App\Http\Requests\UpdateReportRequest;
 
 class ReportController extends Controller
 {
+    // ======================================================
+    // ReportController (API)
+    // Menangani operasi CRUD untuk entitas laporan yang dipakai
+    // oleh frontend mobile/web. Metode di kelas ini bertanggung jawab
+    // untuk: pencarian/paginasi laporan, pembuatan laporan baru
+    // termasuk upload foto, pengambilan detail, pembaruan jika
+    // laporan masih berstatus 'diterima', penghapusan, dan
+    // pembaruan status oleh admin disertai pencatatan pada log status.
+    // Keamanan: beberapa operasi membatasi akses berdasarkan role
+    // (mis. warga hanya melihat/kelola laporan mereka sendiri).
+    // ======================================================
+
     // GET /api/v1/reports
+    /// Mengembalikan daftar laporan dengan relasi `user` dan `category`.
+    /// - Jika user berrole `user`, hanya mengembalikan laporan milik user tersebut.
+    /// - Response: koleksi `ReportResource` berpaginasi (10 per halaman).
     public function index(Request $request)
     {
         $query = Report::with(['user', 'category']);
@@ -30,6 +45,11 @@ class ReportController extends Controller
     }
 
     // POST /api/v1/reports
+    /// Membuat laporan baru.
+    /// - Validasi: title, description, category_id, location_address; photo opsional.
+    /// - Jika ada file `photo`, disimpan di disk `public` pada folder `reports`.
+    /// - Menetapkan `status` awal ke `diterima` dan `urgency` default `normal`.
+    /// - Return: `ReportResource` dari model yang baru dibuat.
     public function store(StoreReportRequest $request)
     {
         $request->validate([
@@ -66,6 +86,9 @@ class ReportController extends Controller
     }
 
     // GET /api/v1/reports/{id}
+    /// Mengembalikan detail laporan termasuk relasi `user`, `category`,
+    /// dan `statusLogs.changedBy`. Jika peminta berrole `user`, pastikan
+    /// hanya dapat mengakses laporan miliknya sendiri.
     public function show(Report $report)
     {
         if (Auth::user()->hasRole('user') && $report->user_id !== Auth::id()) {
@@ -75,6 +98,9 @@ class ReportController extends Controller
     }
 
     // PUT /api/v1/reports/{id}
+    /// Memperbarui laporan jika pemilik yang mengirim dan status masih `diterima`.
+    /// - Validasi: field tertentu bersifat `sometimes`.
+    /// - Return: resource yang diperbarui.
     public function update(Request $request, Report $report)
     {
         if ($report->user_id !== Auth::id()) {
@@ -102,6 +128,7 @@ class ReportController extends Controller
     }
 
     // DELETE /api/v1/reports/{id}
+    /// Menghapus laporan. Warga hanya dapat menghapus miliknya sendiri.
     public function destroy(Report $report)
     {
         if (Auth::user()->hasRole('user') && $report->user_id !== Auth::id()) {
@@ -112,6 +139,9 @@ class ReportController extends Controller
     }
 
     // PUT /api/v1/reports/{id}/status  (admin only)
+    /// Memperbarui status laporan oleh admin dan mencatat perubahan ke log status.
+    /// - Validasi: status harus salah satu dari daftar yang diperbolehkan.
+    /// - Side-effect: membuat record `ReportStatusLog` untuk audit trail.
     public function updateStatus(UpdateReportStatusRequest $request, Report $report)
     {
         $request->validate([

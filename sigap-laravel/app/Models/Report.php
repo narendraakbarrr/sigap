@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Report extends Model
 {
+    // ======================================================
+    // Model: Report
+    // Merepresentasikan laporan yang dibuat oleh user.
+    // Fitur utama:
+    // - Soft deletes untuk memulihkan laporan terhapus.
+    // - Konstanta status dan urgensi untuk konsistensi business logic.
+    // - Relasi: `user()`, `category()`, `statusLogs()`.
+    // Catatan: `photo_path` menyimpan path pada disk `public`.
+    // ======================================================
     use SoftDeletes;
 
     // Konstanta status

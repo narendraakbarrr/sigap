@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    // ======================================================
+    // CategoryController (Web)
+    // Mengelola CRUD kategori laporan pada panel admin.
+    // Metode menyediakan listing dengan pencarian, serta operasi create/update/delete.
+    // Saat menghapus, controller memeriksa apakah kategori masih memiliki laporan.
+    // ======================================================
     public function index(Request $request)
     {
         $query = ReportCategory::withCount('reports');
