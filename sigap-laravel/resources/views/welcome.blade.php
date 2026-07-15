@@ -232,7 +232,7 @@
             <div class="hero-copy">
                 <div class="hero-eyebrow">Siap Tanggap</div>
                 <h1 class="hero-title">SIGAP: Sistem Informasi Gangguan dan Aspirasi Publik</h1>
-                <p class="hero-text">Kelola laporan darurat, pantau kategori, dan berikan respons cepat dengan antarmuka yang jelas, ringan, dan mudah digunakan. SIGAP membantu tim kamu tetap terkoordinasi dan siap beraksi.</p>
+                <p class="hero-text">Kelola laporan darurat, pantau kategori, dan berikan respons cepat dengan antarmuka yang jelas, ringan, dan mudah digunakan. Tim SIGAP terkoordinasi dan siap beraksi.</p>
                 <div class="hero-features">
                     <span class="hero-feature">Laporan real-time</span>
                     <span class="hero-feature">Dashboard analitik</span>
