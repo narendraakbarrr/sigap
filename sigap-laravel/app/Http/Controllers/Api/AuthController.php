@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -35,7 +36,8 @@ class AuthController extends Controller
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        $user->assignRole('user');
+        $role = Role::firstOrCreate(['name' => 'user']);
+        $user->assignRole($role);
         $token = $user->createToken('sigap-mobile')->plainTextToken;
 
         return response()->json([
