@@ -9,7 +9,7 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
 
             {{-- Flash message handled by layouts partial --}}
-            
+
             {{-- Statistik laporan saya --}}
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4">
                 @foreach([
@@ -27,6 +27,13 @@
                     </p>
                 </div>
                 @endforeach
+            </div>
+
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Daftar Laporan Saya</h3>
+                <a href="{{ route('user.reports.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
+                    + Buat Laporan
+                </a>
             </div>
 
             {{-- Filter status --}}
@@ -60,6 +67,7 @@
                             <th class="px-4 py-3">Lokasi</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3">Tanggal</th>
+                            <th class="px-4 py-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -86,6 +94,19 @@
                             </td>
                             <td class="px-4 py-3 text-gray-500">
                                 {{ $report->created_at->format('d M Y') }}
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="flex gap-2">
+                                    <a href="{{ route('user.reports.show', $report) }}" class="text-blue-600 hover:underline text-sm">Lihat</a>
+                                    @if($report->status === \App\Models\Report::STATUS_DITERIMA)
+                                        <a href="{{ route('user.reports.edit', $report) }}" class="text-yellow-600 hover:underline text-sm">Edit</a>
+                                    @endif
+                                    <form action="{{ route('user.reports.destroy', $report) }}" method="POST" onsubmit="return confirm('Hapus laporan ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:underline text-sm">Hapus</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty

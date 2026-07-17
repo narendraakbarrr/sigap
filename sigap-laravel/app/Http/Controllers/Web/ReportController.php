@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\WebReportStoreRequest;
+use App\Http\Requests\WebReportUpdateRequest;
 use App\Models\Report;
 use App\Models\ReportCategory;
 use App\Models\ReportStatusLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
@@ -88,12 +91,108 @@ class ReportController extends Controller
         return view('user.reports.index', compact('reports', 'stats', 'categories'));
     }
 
+    // Halaman daftar laporan untuk warga
+    public function create()
+    {
+        $categories = ReportCategory::all();
+
+        return view('user.reports.create', compact('categories'));
+    }
+
+    // Simpan laporan baru oleh warga
+    public function store(WebReportStoreRequest $request)
+    {
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('reports', 'public');
+        }
+
+        Report::create([
+            'user_id' => Auth::id(),
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'photo_path' => $photoPath,
+            'location_address' => $request->location_address,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'status' => Report::STATUS_DITERIMA,
+            'urgency' => $request->urgency ?? Report::URGENCY_NORMAL,
+        ]);
+
+        return redirect()
+            ->route('user.reports.index')
+            ->with('success', 'Laporan berhasil dikirim!');
+    }
+
     // Detail satu laporan
     /// Menampilkan halaman detail laporan termasuk histori status.
     public function show(Report $report)
     {
+        if (Auth::user()->hasRole('user') && $report->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $report->load(['user', 'category', 'statusLogs.changedBy']);
+
+        if (Auth::user()->hasRole('user')) {
+            return view('user.reports.show', compact('report'));
+        }
+
         return view('admin.reports.show', compact('report'));
+    }
+
+    public function edit(Report $report)
+    {
+        if (Auth::user()->hasRole('user') && $report->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (Auth::user()->hasRole('user') && $report->status !== Report::STATUS_DITERIMA) {
+            return redirect()
+                ->route('user.reports.show', $report)
+                ->with('error', 'Laporan hanya dapat diedit selama berstatus Diterima.');
+        }
+
+        $categories = ReportCategory::all();
+
+        return view('user.reports.edit', compact('report', 'categories'));
+    }
+
+    public function update(WebReportUpdateRequest $request, Report $report)
+    {
+        if (Auth::user()->hasRole('user') && $report->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (Auth::user()->hasRole('user') && $report->status !== Report::STATUS_DITERIMA) {
+            return redirect()
+                ->route('user.reports.show', $report)
+                ->with('error', 'Laporan hanya dapat diedit selama berstatus Diterima.');
+        }
+
+        $data = [
+            'title' => $request->title,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'location_address' => $request->location_address,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'urgency' => $request->urgency ?? Report::URGENCY_NORMAL,
+        ];
+
+        if ($request->hasFile('photo')) {
+            if ($report->photo_path) {
+                Storage::disk('public')->delete($report->photo_path);
+            }
+            $data['photo_path'] = $request->file('photo')->store('reports', 'public');
+        }
+
+        $report->update($data);
+
+        return redirect()
+            ->route('user.reports.show', $report)
+            ->with('success', 'Laporan berhasil diperbarui');
     }
 
     // Form update status
@@ -129,10 +228,19 @@ class ReportController extends Controller
     /// Melakukan soft-delete untuk laporan (dapat dipulihkan).
     public function destroy(Report $report)
     {
+        if (Auth::user()->hasRole('user') && $report->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if ($report->photo_path) {
+            Storage::disk('public')->delete($report->photo_path);
+        }
+
         $report->delete();
+
         return redirect()
-            ->route('admin.reports.index')
-            ->with('success', 'Laporan berhasil dihapus.');
+            ->route(Auth::user()->hasRole('user') ? 'user.reports.index' : 'admin.reports.index')
+            ->with('success', 'Laporan berhasil dihapus');
     }
 
     // Halaman laporan yang sudah dihapus (trash)
