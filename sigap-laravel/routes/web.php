@@ -92,6 +92,18 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/reports', [\App\Http\Controllers\Web\ReportController::class, 'userIndex'])
                 ->name('reports.index');
+            Route::get('/reports/create', [\App\Http\Controllers\Web\ReportController::class, 'create'])
+                ->name('reports.create');
+            Route::post('/reports', [\App\Http\Controllers\Web\ReportController::class, 'store'])
+                ->name('reports.store');
+            Route::get('/reports/{report}', [\App\Http\Controllers\Web\ReportController::class, 'show'])
+                ->name('reports.show');
+            Route::get('/reports/{report}/edit', [\App\Http\Controllers\Web\ReportController::class, 'edit'])
+                ->name('reports.edit');
+            Route::put('/reports/{report}', [\App\Http\Controllers\Web\ReportController::class, 'update'])
+                ->name('reports.update');
+            Route::delete('/reports/{report}', [\App\Http\Controllers\Web\ReportController::class, 'destroy'])
+                ->name('reports.destroy');
         });
 });
 

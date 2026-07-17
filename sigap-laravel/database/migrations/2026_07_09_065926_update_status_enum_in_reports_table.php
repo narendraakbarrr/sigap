@@ -1,15 +1,21 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        // MySQL: ubah enum langsung via raw query
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement("ALTER TABLE reports RENAME COLUMN status TO status_old");
+            DB::statement("ALTER TABLE reports ADD COLUMN status VARCHAR(255) NOT NULL DEFAULT 'diterima'");
+            DB::statement("UPDATE reports SET status = status_old");
+            DB::statement("ALTER TABLE reports DROP COLUMN status_old");
+
+            return;
+        }
+
         DB::statement("ALTER TABLE reports MODIFY COLUMN status
             ENUM(
                 'diterima',
@@ -23,6 +29,15 @@ return new class extends Migration
 
     public function down(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement("ALTER TABLE reports RENAME COLUMN status TO status_old");
+            DB::statement("ALTER TABLE reports ADD COLUMN status VARCHAR(255) NOT NULL DEFAULT 'diterima'");
+            DB::statement("UPDATE reports SET status = status_old");
+            DB::statement("ALTER TABLE reports DROP COLUMN status_old");
+
+            return;
+        }
+
         DB::statement("ALTER TABLE reports MODIFY COLUMN status
             ENUM(
                 'diterima',
