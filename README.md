@@ -161,7 +161,7 @@ flutter build ipa --release
 # Output: build/ios/ipa/*.ipa
 ```
 
-> 📦 **Unduh APK hasil build:** tersedia di halaman [GitHub Releases](https://github.com/[username]/sigap/releases) repository ini.
+> 📦 **Unduh APK hasil build:** tersedia di halaman [GitHub Releases](https://github.com/narendraakbarrr/sigap/releases) repository ini.
 
 ---
 
