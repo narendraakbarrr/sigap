@@ -147,6 +147,22 @@ static const String baseUrl = 'http://10.0.2.2:8000/api/v1';
 flutter run
 ```
 
+#### Build Rilis (Android / iOS)
+
+Target build aplikasi mobile adalah **Android (APK)** dan **iOS (IPA)**.
+
+```bash
+# Build APK (Android)
+flutter build apk --release
+# Output: build/app/outputs/flutter-apk/app-release.apk
+
+# Build IPA (iOS)
+flutter build ipa --release
+# Output: build/ios/ipa/*.ipa
+```
+
+> 📦 **Unduh APK hasil build:** tersedia di halaman [GitHub Releases](https://github.com/[username]/sigap/releases) repository ini.
+
 ---
 
 ## 👥 Akun Default
@@ -259,7 +275,15 @@ photo            : [file gambar, opsional]
 
 ## 📄 Laporan
 
-Dokumen laporan ilmiah tersedia di folder [`Laporan/`](./Laporan/).
+Dokumen laporan ilmiah tersedia di folder [`Laporan/`](./Laporan/). Berikut status perbaikan laporan sesuai ketentuan terbaru:
+
+| No | Perbaikan | Status |
+|:--:|---|:--:|
+| 1 | Literature Review — kajian pustaka dan studi terhadap penelitian/sistem sejenis | ✅ Selesai |
+| 2 | Metode yang Digunakan — metodologi pengembangan sistem yang diterapkan pada proyek ini | ✅ Selesai |
+| 3 | Arsitektur Sistem — rancangan arsitektur client-server (web admin, REST API, dan aplikasi mobile) | ✅ Selesai |
+
+> Ketiga poin di atas telah ditambahkan ke dalam dokumen laporan.
 
 ---
 
